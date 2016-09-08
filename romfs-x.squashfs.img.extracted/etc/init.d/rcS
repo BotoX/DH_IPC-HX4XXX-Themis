@@ -40,3 +40,4 @@ touch /mnt/mtd/Config/dial-ip
 /usr/etc/imod
 
 #/etc/init.d/appauto
+echo "on" > /var/tmp/telnet
