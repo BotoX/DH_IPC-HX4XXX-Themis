@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            系统日志
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：</span>
+            仅支持以下能力的设备才具有相对应的功能。
+        </p>
+        <h2>系统日志介绍</h2>
+        <p class="detailP">记录用户对设备的操作信息，以及部分系统信息。</p>
+        <h2>参数说明</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>参数项</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td class="wid80">开始时间</td>
+                <td>查找日志的开始时间（最早为2000年1月1日）。</td>
+            </tr>
+            <tr>
+                <td class="wid80">结束时间</td>
+                <td>查找日志的结束时间（最迟为2037年12月31日)。</td>
+            </tr>
+            <tr>
+                <td class="wid80">类型</td>
+                <td>日志信息类型可分为系统操作、配置操作、数据管理、报警事件、录像操作、用户管理、日志清除。</td>
+            </tr>
+            <tr>
+                <td class="wid80">搜索</td>
+                <td>
+                    先设置所需查找日志的起始时间和结束时间，并选择日志类型，点击“搜索”，动态显示搜索条数；点击“停止”,暂停日志搜索，显示已搜索条数和时间段区域。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">系统日志信息</td>
+                <td>单击日志记录，可显示该条日志的详细信息。</td>
+            </tr>
+            <tr>
+                <td class="wid80">清空</td>
+                <td>清除设备上所有的日志信息，不支持日志信息的分类清除。</td>
+            </tr>
+            <tr>
+                <td class="wid80">备份</td>
+                <td>将搜索到的系统日志信息备份至用户当前使用的PC上。</td>
+            </tr>
+        </table>
+        <p class="normalP">
+            <span class="boldT">不同日志类型包含的具体含义：</span>
+        </p>
+        <p class="iconP2">
+            <span class="boldT">系统操作：</span>
+            <SPAN class="yellow">包括应用程序启动、异常退出、退出、应用程序重启、关闭/重启设备、系统重启、系统升级。</SPAN>
+        </p>
+        <p class="iconP2">
+            <span class="boldT">配置操作：</span>
+            <SPAN class="yellow">包括保存配置、删除配置文件，聚焦缩放。</SPAN>
+        </p>
+        <p class="iconP2">
+            <span class="boldT">数据操作：</span>
+            <SPAN class="yellow">包括设置硬盘类型、清空数据、热插拔、FTP状态、NAS状态、录像模式、SD卡出错、硬盘出错。</SPAN>
+        </p>
+        <p class="iconP2">
+            <span class="boldT">事件操作（记录动态检测、视频遮挡、本地报警事件发生）：</span>
+            <SPAN class="yellow">包括事件开始、事件结束。</SPAN>
+        </p>
+        <p class="iconP2">
+            <span class="boldT">录像操作：</span>
+            <SPAN class="yellow">包括文件访问、文件访问错误、文件查询。</SPAN>
+        </p>
+        <p class="iconP2">
+            <span class="boldT">用户管理（记录用户管理的修改以及用户的登录、注销）：</span>
+            <SPAN class="yellow">包括登录、注销、添加用户、删除用户、修改用户、添加组、删除组、修改组。</SPAN>
+        </p>
+        <p class="iconP2">
+            <span class="boldT">清空日志：</span>
+            <SPAN class="yellow">清除日志。</SPAN>
+        </p>
+
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

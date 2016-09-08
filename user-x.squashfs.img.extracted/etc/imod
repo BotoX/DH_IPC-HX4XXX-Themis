@@ -1,0 +1,40 @@
+#! /bin/sh
+echo 1048576 > /proc/sys/net/core/wmem_max	
+echo 524288 > /proc/sys/net/core/wmem_default 
+
+echo 2 > /proc/sys/net/ipv4/tcp_early_retrans
+echo 1 >  /proc/sys/vm/overcommit_memory
+touch /tmp/enc2app_data
+touch /tmp/enc2app_cmd
+touch /tmp/cmd_shmarea
+touch /tmp/myencodemsg
+
+insmod /usr/lib/modules/ambarella_eth.ko
+
+insmod /usr/lib/modules/osa.ko
+insmod /usr/lib/modules/log.ko
+insmod /usr/lib/modules/binder.ko r0size=256 r2size=1536
+
+insmod /usr/lib/modules/spf.ko
+
+insmod /usr/lib/modules/prc.ko
+insmod /usr/lib/modules/pdc.ko gBaseline=240 sdk=260
+
+STRING=$(gethwid 2)
+temp=${STRING##*hwidValue == }
+CATEGORY=${temp%% *}
+echo CATEGORY = $CATEGORY 
+
+if [ $CATEGORY -eq 3 ];then
+	echo "SD Device"
+	/usr/etc/SDimod
+else
+	echo "IPC Device"
+	insmod /usr/lib/modules/crypt.ko
+	if [ -f "/mnt/mtd/IPCimod" ];then
+		/mnt/mtd/IPCimod
+	else
+		/usr/etc/IPCimod
+	fi	
+fi
+

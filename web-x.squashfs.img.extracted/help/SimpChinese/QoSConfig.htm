@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            QoS
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <h2>QoS介绍</h2>
+        <p class="detailP">
+            对于DSCP优先级有64个(0-63)，标识了包的优先级不同，0优先级最低，63优先级最高，根据包的优先级选择的不同出队列，不同出队列所占的带宽资源，拥塞时丢弃比例不同，从而实现服务质量的目标。
+        </p>
+        <h2>参数说明</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>参数项</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td class="wid80">实时监视</td>
+                <td>网络视频监视的数据包。</td>
+            </tr>
+            <tr>
+                <td class="wid80">操作命令</td>
+                <td>对设备进行配置、查询等非监视的数据包。</td>
+            </tr>
+        </table>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

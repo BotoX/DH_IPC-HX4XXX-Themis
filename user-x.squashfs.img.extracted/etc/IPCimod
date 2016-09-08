@@ -1,0 +1,880 @@
+#! /bin/sh
+ifconfig lo up
+netinit if=eth0 default
+netinit6 if=eth0
+
+/sbin/syshelper 60 &
+/usr/sbin/upgraded &
+
+insmod /usr/lib/modules/sensor.ko
+
+insmod /usr/lib/modules/ivf.ko size=506
+
+#加载amba驱动
+insmod /usr/lib/modules/amba_video.ko
+
+
+insmod /usr/lib/modules/sdcard.ko
+
+#insmod /usr/lib/modules/motorDrv.ko
+
+mknod /dev/fdet c 248 148
+mknod /dev/ambad c 248 248
+mknod /dev/dsplog c 248 249
+
+/usr/sbin/load_ucode /usr/lib/firmware
+case "$?" in
+	0)
+	;;
+	*)
+  	echo "Load ucode failed!"
+	exit 1
+	;;
+esac
+
+#读取完整的HWID
+HWID=$(armbenv -r HWID | grep HWID)
+temp=${HWID##*HWID = }
+hwid_value=${temp%% *}
+echo hwid_value =$hwid_value
+
+#解析设备名称和前端类型
+PRODUCT=$(gethwid 0)
+temp=${PRODUCT##*hwidValue == }
+product_name=${temp%% *}
+echo product_name =$product_name
+
+#修改PAD TERM
+case "$product_name" in
+	"IPC-HDW2320R-Z" | "IPC-HFW2320R-ZS" | "IPC-HDBW2320R-ZS" | "IPC-HDBW2320R-ZAS" | "IPC-HFW2320R-Z" | "IPC-HFW2320R-VFS" | \
+	"IPC-HDBW2121R-ZS" | "IPC-HDBW2221R-ZS" | "IPC-HDBW2421R-ZS" | "IPC-HFW2121R-VFS" | "IPC-HFW2221R-VFS" | "IPC-HFW2421R-VFS" | "IPC-HFW4120R-VF-V2" | \
+	"IPC-HFW2121R-ZS" | "IPC-HFW2221R-ZS" | "IPC-HFW2421R-ZS" | "IPC-HFW2121R-ZS-V2" | "IPC-HFW2121R-VFS-V2" | "IPC-HDBW2121R-ZS-V2" | "IPC-HFW4120R-Z-V2" | "IPC-HDBW4120R-Z-V2" | \
+	"IPC-HDBW2121R-VFS-V2" | "IPC-HDBW4120R-VF-V2" | "IPC-HDBW2221R-VFS") 
+		amba_debug -w 0xdffe0824 -d 0x5e02002d
+	;;
+esac
+
+# 安装网卡驱动
+if [ "$product_name" = "IPC-KW10W-0280B-ZH" ];then
+	rmmod  /usr/lib/modules/ambarella_eth.ko
+	
+	echo  device  >  /proc/ambarella/usbphy0
+	insmod /usr/lib/modules/udc-core.ko
+	insmod /usr/lib/modules/ambarella_udc.ko
+	insmod /usr/lib/modules/libcomposite.ko
+	#insmod /usr/lib/modules/g_ether.ko
+fi
+
+#解析镜头类型
+LENSTYPE=$(gethwid 19)
+temp=${LENSTYPE##*hwidValue == }
+lens_type=${temp%% *}
+echo lens_type =$lens_type
+
+
+STRSEN=$(gethwid 4)
+temp=${STRSEN##*hwidValue == }
+fvideo_chip=${temp%% *}
+echo fvideo_chip = $fvideo_chip
+
+#是否支持模拟输出
+cap_vout="TVOUT"
+VOUTSUPPORT=$(gethwid 16)
+echo $VOUTSUPPORT
+temp=${VOUTSUPPORT##*hwidValue == }
+vout_support=${temp%% *}
+echo vout_support =$vout_support
+if [ $vout_support -eq 0 ];then
+	cap_vout=""
+fi
+echo cap_vout = $cap_vout
+
+DSPCHIP=$(gethwid 5)
+temp=${DSPCHIP##*hwidValue == }
+dspChip=${temp%% *}
+echo dspChip = $dspChip
+
+#根据设备型号确定驱动加载能力
+cap_af=""
+cap_wifi=0
+cap_3g=0
+case "$product_name" in
+        "IPC-KW100W" | "IPC-KW100W-R" | "IPC-K200W" | "DH-CE-TP1S")
+        	cap_wifi=1
+        	;;
+esac
+
+case "$product_name" in
+        "IPC-HFW7226F-W4G" | "IPC-HFW7226F-4G-V2" | "IPC-K15-LTE" | "IPC-K35-LTE")
+        	cap_3g=1
+        	;;
+esac
+
+WIFI=$(gethwid 14)
+temp=${WIFI##*hwidValue == }
+wifi=${temp%% *}
+echo wifi = $wifi
+
+if [ "$wifi" = "0" ];then
+	cap_wifi=0
+	echo ------cap_wifi = $cap_wifi
+else
+	cap_wifi=1
+    echo ******cap_wifi = $cap_wifi
+fi
+
+case "$product_name" in
+
+        "IPC-AW13W" | "IPC-HFW7226F-W4G" | "IPC-HFW7226F-WS" | "IPC-AW25W-Amcrest" | "IPC-AW25W-V2-Amcrest" | "IPC-AW15W-Amcrest" | \
+		"IPC-C15" | "IPC-C35" | "IPC-K15" | "IPC-K35" | "IPC-HDBW1120E-W" | "IPC-HDBW1320E-W" | "IPC-HDBW1120E-AW" | "IPC-HDBW1320E-AW" | \
+		"IPC-A35" | "IPC-A15" | "IPC-C15-CE")
+        	cap_wifi=2
+        	;;
+		"IPC-AW25W-5G" | "IPC-AW15W-5G" | "IPC-K15-5G" | "IPC-K35-5G" | "IPC-AW35W-5G")
+        	cap_wifi=4
+        	;;
+esac
+
+if [ $cap_wifi -eq 1 ];then
+	echo host > /proc/ambarella/usbphy0                     #将设备的usb设置成host模式
+	insmod /usr/lib/modules/Wireless/AR9271STA/cfg80211.ko
+	insmod /usr/lib/modules/Wireless/AR9271STA/mac80211.ko
+	insmod /usr/lib/modules/Wireless/AR9271STA/ath9k_htc.ko
+fi
+
+if [ $cap_wifi -eq 2 ];then
+	echo host > /proc/ambarella/usbphy0                     #将设备的usb设置成host模式
+	#USB切换到host模式之后读取设备描述需要时间,加载驱动会对wifi下电操作影响设备描述读取
+	sleep 1
+    insmod /usr/lib/modules/8188eu.ko
+
+fi
+
+if [ $cap_wifi -eq 4 ];then
+	echo host > /proc/ambarella/usbphy0                     #将设备的usb设置成host模式
+	#USB切换到host模式之后读取设备描述需要时间,加载驱动会对wifi下电操作影响设备描述读取
+	sleep 1
+        insmod /usr/lib/modules/8811au.ko
+fi
+
+cap_motor=""
+case "$product_name" in
+
+        "IPC-HFW4103E" | "IPC-HFW4203D" | "IPC-HFW5120E-Z" | "IPC-HFW5120D-Z" | "IPC-HFW5220D-Z" | "IPC-HDBW5120E-Z" | "IPC-HDBW5120EP-Z" | "IPC-HDBW5121E-Z" | "IPC-HDB5121E-Z" | "IPC-HDBW5121EP-Z" | "IPC-HDBW5220E-Z" | "IPC-HDBW5220EP-Z" | "IPC-HDBW5221E-Z" | "IPC-HDB5221E-Z" | "IPC-HDBW5221EP-Z" | "IPC-HDBW5421E-Z" | "IPC-HDB5421E-Z" | "IPC-HDBW5421EP-Z" | "IPC-HDW2120R-Z" | "IPC-HDW2220R-Z" | "IPC-HFW5121E-Z" | "IPC-HFW5220E-Z" | "IPC-HFW5221E-Z" | "IPC-HFW5121D-Z" | "IPC-HFW5221D-Z" | "IPC-HFW5421E-Z" | "IPC-HFW5421D-Z" | "IPC-HF5120E" | "IPC-HF5121E" | "IPC-HF5220E" | "IPC-HF5221E" | "IPC-HF5421E" | "IPC-HFW5121E-ZH" | "IPC-HFW5220E-ZH" | "IPC-HFW5221E-ZH" | "IPC-HFW5421E-ZH" | "IPC-HFW5121E-CA-IRA" | "IPC-HFW5221E-CA-IRA" | "IPC-HFW5221D-CA" | "IPC-HDW4120R-Z" | "IPC-HDW4220R-Z" | "IPC-HDW2320R-Z" | \
+		"IPC-HDBW5121EP-ZH" | "IPC-HDBW5221EP-ZH" | "IPC-HDBW5220EP-ZH" | "IPC-HDBW5421EP-ZH" | "IPC-HDBW5121E-ZH" | "IPC-HDBW5221E-ZH" | "IPC-HDBW5421E-ZH" | "IPC-HFW2120R-ZS" | "IPC-HFW2220R-ZS" | "IPC-HFW2320R-ZS" | "IPC-HFW2421R-ZS" | "IPC-HDBW2120R-ZS" | "IPC-HDBW2220R-ZS" | "IPC-HDBW2320R-ZS" | "IPC-HF5121E-A2" | "IPC-HF5221E-A2" | "IPC-HF5421E-A2" | "IPC-HFW5421E-CA-IRA" | \
+		"IPC-HFW4120R-ZAS" | "IPC-HFW4120R-Z" | "IPC-HFW4220R-ZAS" | "IPC-HFW4220R-Z" | "IPC-AW13W" | "IPC-HFW8321EN-Z" | "IPC-HFW8221EN-Z" | "IPC-HDBW2320R-ZAS" | "IPC-HDBW8321EN-Z" | "IPC-HDBW8221EN-Z" | \
+		"IPC-HDBW5121E-Z-A2" | "IPC-HDBW5221E-Z-A2" | "IPC-HDBW5421E-Z-A2" | "IPC-A35" | "IPC-HFW2320R-Z" | "IPC-A15" | "IPC-HF5231E" | "IPC-HF5431E" | \
+		"IPC-HFW5231E-Z" | "IPC-HFW5431E-Z" | "IPC-HDW5231R-Z" | "IPC-HDW5431R-Z" | "IPC-HDBW5231R-Z" | "IPC-HDBW5431R-Z" | "IPC-HDBW5231EP-Z-S2" | "IPC-HDBW5431EP-Z-S2" | "IPC-HDBW5231E-Z-S2" | "IPC-HDBW5431E-Z-S2" | "IPC-HDBW5830R" | \
+		"IPC-HFW2121R-ZS" | "IPC-HFW2221R-ZS" | "IPC-HFW2421R-ZS" | "IPC-HDBW2121R-ZS" | "IPC-HDBW2221R-ZS" | "IPC-HDBW2421R-ZS" | "IPC-HF5121E-V2" | "IPC-HFW5121E-Z-V2" | "IPC-HFW5121D-Z-V2" | "IPC-HDB5121E-Z-V2" | \
+		"IPC-HDBW5121E-Z-V2" | "IPC-HDBW5121E-Z-A2-V2" | "IPC-HFW2121R-ZS-V2" | "IPC-HDBW2121R-ZS-V2" | "IPC-HFW4120R-Z-V2" | "IPC-HDBW4120R-Z-V2" | "IPC-HDBW5121EP-Z-V2" | "IPC-HFW5121E-ZH-V2")
+        	cap_motor="MOTOR"
+        	;;
+		"IPC-AW15W-Amcrest" | "IPC-AW25W-Amcrest" | "IPC-AW25W-V2-Amcrest" | "IPC-AW25A-Amcrest" | "IPC-AW15A-Amcrest" | "IPC-AW15A-Amcrest-V2"| "IPC-AW25A-Amcrest-V2" | "IPC-AW25W-5G" | "IPC-AW15W-5G" | "IPC-AW35W-5G")
+        	cap_motor="MOTOR"
+			if [ "$fvideo_chip" = "46" ];then
+				ptzcal=CAL_LS26F
+				ptzcfg=CFG_AW15W
+			else
+				ptzcal=CAL_YT40F
+				ptzcfg=CFG_AW25W_V2
+			fi
+        	;;
+esac
+
+if [ "$cap_motor" != "" ];then
+	insmod /usr/lib/modules/motorDrv.ko
+fi
+
+#解压缩pd到tmp目录
+unzip /mnt/pd/product.zip -d /var/tmp > /dev/null
+
+#解压缩2A参数到tmp目录
+#unzip /usr/data/2Acfg.zip -d /var/tmp > /dev/null
+
+cp -r /usr/data/2Acfg /var/tmp/2Acfg/
+
+cp -r /usr/data/ptzcfg /var/tmp/ptzcfg/
+#创建pd目录
+mkdir -p /var/tmp/pd
+
+#将设备名映射文件拷贝的pd分区
+cp -f /var/tmp/product/ProductTransform /var/tmp/pd/
+
+
+
+#根据不同的设备类型拷贝pd文件和2A参数文件
+
+#根据设备型号确定需要用product下的哪个目录以及2Acfg下的哪个目录
+case "$product_name" in
+	
+	"IPC-HF5121E" | "IPC-HF5121E-A2")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5121E
+		;;
+	"IPC-HF5120E" )
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5120E
+		;;	
+	"IPC-HF5421E" | "IPC-HF5421E-A2")
+		product=IPC-HF5421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HFW4121B" | "IPC-HDBW4121F-S")
+		product=IPC-HF4121E
+		aewcfg=IPC-HF5121E
+		;;
+	"IPC-HFW4221B" | "IPC-HFW4221BH")
+		product=IPC-HF4221E
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HFW4120B-V2" | "IPC-HDW4120C-A-V2" | "IPC-HFW4120B-0280B-V2" | "IPC-HDW4120C-A-0280B-V2")
+		product=IPC-HF4121E
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HFW4421B" | "IPC-HFW4421BH")
+		product=IPC-HF4421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HDPW1420F" | "IPC-HFW2421R-VFS" | "IPC-HFW2421R-ZS" | "IPC-HDBW2421R-ZS")
+		product=IPC-HF2420R
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HDBW4120E" | "IPC-HDBW4120F-S" | "IPC-HDBW4120EH" | "IPC-HDW4120E-AS" | "IPC-HFW4120R-VFAS" | "IPC-HFW4120R-VF" | "IPC-HDW4120C-A" | "IPC-HDBW4120R-VFAS")
+		product=IPC-HF4121E
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-HFW2120R-VFS")
+		product=IPC-HF2120R
+		aewcfg=IPC-HF5120E
+		;;	
+	"IPC-HFW2121R-VFS" | "IPC-HFW2121R-ZS" | "IPC-HDBW2121R-ZS")
+		product=IPC-HF2120R
+		aewcfg=IPC-HF5121E
+		;;	
+	"IPC-HFW2121R-VFS-V2" | "IPC-HFW2121R-ZS-V2" | "IPC-HDBW2121R-ZS-V2" | "IPC-HDBW2121R-VFS-V2")
+		product=IPC-HF2120R
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HDBW4220E" | "IPC-HDBW4220EH" | "IPC-HDW4220E-AS" | "IPC-HFW4220R-VFAS" | "IPC-HFW4220R-VF" | "IPC-HDW4220C-A")
+		product=IPC-HF4221E
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HFW2220R-VFS")
+		product=IPC-HF2220R
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HFW2221R-VFS" | "IPC-HFW2221R-ZS" | "IPC-HDBW2221R-ZS" | "IPC-HDBW2221R-VFS")
+		product=IPC-HF2220R
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HDBW4421E" | "IPC-HDBW4421F-S" | "IPC-HDW4421E-AS" | "IPC-HDW4421C-A")
+		product=IPC-HF4421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HDB4421E" )
+		product=IPC-HF4421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HDB4120E" )
+		product=IPC-HF4121E
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-HDBW4221E" | "IPC-HDBW4221F-S" | "IPC-HDW4221E-AS" | "IPC-HDW4221C-A")
+		product=IPC-HF4221E
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HDPW4120FP-W" )
+		product=IPC-HDPW4120FP-W
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-HDPW4120FP-W-V2" | "IPC-HDPW4120FP-W-0280B-V2")
+		product=IPC-HDPW4120FP-W
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HDPW4220FP-W" )
+		product=IPC-HDPW4221FP-W
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HDPW4221FP-W" )
+		product=IPC-HDPW4221FP-W
+		aewcfg=IPC-HF5221E
+	;;
+	"IPC-HDBW7121F-M" | "IPC-HDB7121F-AS-ME" )
+		product=IPC-HF4121E
+		aewcfg=IPC-HF5121E
+		;;
+	"IPC-HDBW7221F-M")
+		product=IPC-HF4221E
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HDBW7121F-M-V2")
+		product=IPC-HF4121E
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HDBW7221F-MPC" )
+		product=IPC-HFW7226F-MPC
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HDBW7421F-M" )
+		product=IPC-HF4421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HF5220E" )
+		product=IPC-HF5221E
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HDBW5121E" | "IPC-HFW5121D" | "IPC-HDPW5121E")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5121E
+		;;
+	"IPC-HDBW5121E-Z" | "IPC-HDB5121E-Z" | "IPC-HDBW5121E-ZH" | "IPC-HDBW5121E-Z-A2")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5121E
+		;;
+	"IPC-HDBW5121EP" )
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5121E
+		;;
+	"IPC-HDBW5121EP-Z" | "IPC-HDBW5121EP-ZH")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5121E
+		;;
+	"IPC-HDBW5120E" | "IPC-HFW5120D" | "IPC-HFW5120E")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-HDBW5120E-Z" | "IPC-HFW5120D-Z" | "IPC-HFW5120E-Z")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-HDBW5120EP" )
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-HDBW5120EP-Z" )
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-HF5221E" | "IPC-HF5221E-A2" | "IPC-HDBW5221E" | "IPC-HFW5221D" | "IPC-HDB5221E-Z" | "IPC-HDPW5221E" | \
+	"IPC-HDBW5221E-Z" | "IPC-HDBW5221E-ZH" | "IPC-HDBW5221E-Z-A2" | "IPC-HDBW5221EP" | "IPC-HDBW5221EP-Z" | \
+	"IPC-HDBW5221EP-ZH" | "IPC-HFW5221D-Z" | "IPC-HFW5221E-IRA" | "IPC-HFW5221E-Z" | "IPC-HFW5221E-ZH" | \
+	"IPC-HDB5221E" | "IPC-HDP5221E")
+		product=IPC-HF5221E
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HF5121E-V2" | "IPC-HFW5121E-Z-V2" | "IPC-HFW5121D-Z-V2" | "IPC-HDB5121E-Z-V2" | "IPC-HDBW5121E-Z-V2" | "IPC-HDBW5121E-Z-A2-V2" | \
+	"IPC-HDPW5121E-V2" | "IPC-HDP5121E-V2" | "IPC-HDBW5121EP-Z-V2" | "IPC-HFW5121E-ZH-V2")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HDBW5220E" | "IPC-HFW5220D" | "IPC-HFW5220E")
+		product=IPC-HF5221E
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HDBW5220E-Z" )
+		product=IPC-HF5221E
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HDBW5220EP" )
+		product=IPC-HF5221E
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HDBW5220EP-Z" | "IPC-HDBW5220EP-ZH")
+		product=IPC-HF5221E
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HDBW5421E" | "IPC-HFW5421D" | "IPC-HDB5421E" | "IPC-HDP5421E" | "IPC-HDPW5421E")
+		product=IPC-HF5421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HDBW5421E-Z" | "IPC-HDB5421E-Z" | "IPC-HDBW5421E-ZH" | "IPC-HDBW5421E-Z-A2")
+		product=IPC-HF5421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HDBW5421EP" )
+		product=IPC-HF5421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HDBW5421EP-Z" | "IPC-HDBW5421EP-ZH")
+		product=IPC-HF5421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HFW5121D-Z" )
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5121E
+		;;
+	"IPC-HFW5121E-IRA" )
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5121E
+		;;
+	"IPC-HFW5121E-Z" | "IPC-HFW5121E-ZH")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5121E
+		;;
+
+	"IPC-HFW5220E-Z" | "IPC-HFW5220E-ZH")
+		product=IPC-HF5221E
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HFW5220D-Z" )
+		product=IPC-HF5221E
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HFW5421D-Z" )
+		product=IPC-HF5421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HFW5421E-IRA" | "IPC-HFW5421E-CA-IRA")
+		product=IPC-HF5421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HFW5421E-Z" | "IPC-HFW5421E-ZH")
+		product=IPC-HF5421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HDW4120R-Z" | "IPC-HFW4120R-ZAS" | "IPC-HFW4120R-Z")
+		product=IPC-HF4121E
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-HDW2120R-Z" | "IPC-HFW2120R-ZS" | "IPC-HFW4120R-Z" | "IPC-HDBW2120R-ZS" )
+		product=IPC-HF2120R
+		aewcfg=IPC-HF5120E
+		;;	
+	"IPC-HDW4220R-Z" | "IPC-HFW4220R-ZAS" | "IPC-HFW4220R-Z")
+		product=IPC-HF4221E
+		aewcfg=IPC-HF5220E
+		;;		
+	"IPC-HDW2220R-Z" |  "IPC-HFW2220R-ZS" | "IPC-HDBW2220R-ZS" | "IPC-HFW4220R-Z")
+		product=IPC-HF2220R
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-HFW1220R" )
+		product=IPC-HF2220R
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HFW1420R"  | "IPC-HFW2420R-VFS" | "IPC-HFW2420R-ZS")
+		product=IPC-HF2420R
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-HDB4100R" )
+		product=IPC-HF4121E
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-HDB4300R" )
+		product=IPC-HF4421E
+		aewcfg=IPC-HF5421E
+		;;
+	"IPC-EW5500E" )
+		product=IPC-EW5500E
+		aewcfg=IPC-EW5500E
+		;;		
+	"IPC-HFW4521S" )
+		product=IPC-HFW4521S
+		aewcfg=IPC-HFW4521S
+		;;	
+	"IPC-HD1320C" | "IPC-HDW1320S" | "IPC-HFW2320R-VFS")
+		product=IPC-HF2320R
+		aewcfg=IPC-HFW4320B
+		;;	
+	"IPC-HFW4320B")
+		product=IPC-HFW4320B
+		aewcfg=IPC-HFW4320B
+		;;
+	"IPC-HDB5121E" | "IPC-HDP5121E" | "IPC-HFW5121E-CA-IRA")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5121E
+		;;
+
+	"IPC-HFW5221E-CA-IRA" | "IPC-HFW5221D-CA")
+		product=IPC-HF5221E
+		aewcfg=IPC-HFW5221E-CA-IRA
+		;;
+	"IPC-HDW2320R-Z" | "IPC-HFW2320R-ZS" | "IPC-HDBW2320R-ZS" | "IPC-HDBW2320R-ZAS" | "IPC-HFW2320R-Z")
+		product=IPC-HF2320R
+		aewcfg=IPC-HFW4320B
+		;;
+	"IPC-HDB5105H-JT" | "IPC-TDCZ02" | "IPC-HDB5105-JT-0600B" | "IPC-HDBW5105-JT-0600B")
+		product=IPC-HF5121E
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-KW10W-0280B-ZH" )
+		product=IPC-KW10W
+		aewcfg=IPC-HF5120E
+		;;
+	"IPC-AW13W" )
+		product=IPC-AW13W
+		aewcfg=IPC-AW13W
+		ptzcal=CAL_14B36F
+		ptzcfg=CFG_CE_TP1
+		;;
+	"IPC-HFW8321EN-Z" | "IPC-HDBW8321EN-Z" )
+		product=IPC-HFW8321EN-Z
+		aewcfg=IPC-HFW8321E
+		;;
+	"IPC-HFW8221EN-Z" | "IPC-HDBW8221EN-Z" )
+		product=IPC-HFW8221EN-Z
+		aewcfg=IPC-HFW8221E
+		;;
+	"IPC-AW15W-Amcrest" | "IPC-AW15A-Amcrest" | "IPC-AW15A-Amcrest-V2" | "IPC-AW15W-5G")
+		product=IPC-AW15W
+		aewcfg=IPC-AW13W
+		;;
+	"IPC-AW25W-Amcrest" | "IPC-AW25W-V2-Amcrest" | "IPC-AW25A-Amcrest" | "IPC-AW25A-Amcrest-V2" | "IPC-AW25W-5G")
+		product=IPC-AW25W
+		aewcfg=IPC-HF5220E
+		;;
+	"IPC-AW35W-5G")
+		product=IPC-AW35W
+		aewcfg=IPC-HFW4320B
+		;;
+	"IPC-HFW7226F-W4G" | "IPC-HFW7226F-4G-V2")
+		product=IPC-HFW7226F
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-HFW7226F-WS" )
+		product=IPC-HFW7226F-WS
+		aewcfg=IPC-HF5221E
+		;;
+	"IPC-C15")
+		product=IPC-C15
+		aewcfg=IPC-C15
+		;;
+	"IPC-C15-CE")
+		product=IPC-C15-CE
+		aewcfg=IPC-C15
+		;;
+	"IPC-C35")
+		product=IPC-C35
+		aewcfg=IPC-HFW4320B
+		;;
+	"IPC-K15" | "IPC-K15-5G")
+		product=IPC-K15
+		aewcfg=IPC-C15
+		;;
+	"IPC-K35" | "IPC-K35-5G")
+		product=IPC-K35
+		aewcfg=IPC-HFW4320B
+		;;
+	"IPC-K15-LTE")
+		product=IPC-K15-LTE
+		aewcfg=IPC-C15
+		;;
+	"IPC-K35-LTE")
+		product=IPC-K35-LTE
+		aewcfg=IPC-HFW4320B
+		;;
+	"IPC-HDBW1120E-W" | "IPC-HDBW1120E-AW")
+		product=IPC-K-HDBW1120
+		aewcfg=IPC-C15
+		;;
+	"IPC-HDBW1320E-W" | "IPC-HDBW1320E-AW")
+		product=IPC-K-HDBW1320
+		aewcfg=IPC-HFW4320B
+		;;
+	"IPC-A35")
+		product=IPC-A35
+		aewcfg=IPC-HFW4320B
+		ptzcal=CAL_YT40F
+		ptzcfg=CFG_A35
+		;;
+	"IPC-A15")
+		product=IPC-A15
+		aewcfg=IPC-C15
+		ptzcal=CAL_YT40F
+		ptzcfg=CFG_A15
+		;;
+	"IPC-HF5231E")
+		product=IPC-HF5231E
+		aewcfg=IPC-HF5231E
+		;;
+	"IPC-HDW5231R-Z")
+		product=IPC-HF5231E
+		aewcfg=IPC-HF5231E
+		;;
+	"IPC-HFW5231E-Z" | "IPC-HDBW5231EP-Z-S2" | "IPC-HDBW5231E-Z-S2" | "IPC-HDBW5231R-Z" | "IPC-HFW5231E-Z-0735")
+		product=IPC-HF5231E
+		aewcfg=IPC-HF5231E
+		;;
+	"IPC-HF5431E" | "IPC-HDBW5431EP-Z-S2" | "IPC-HDBW5431E-Z-S2" | "IPC-HFW5431E-Z" | "IPC-HDW5431R-Z" | "IPC-HDBW5431R-Z" | "IPC-HFW5431E-Z-0735")
+		product=IPC-HF5431E
+		aewcfg=IPC-HF5431E
+		;;
+	"IPC-HDBW4830EP-AS" | "IPC-HFW4830EP-S" | "IPC-HDW4830EM")
+		product=IPC-HFW4830E
+		aewcfg=IPC-HFW4830E
+		;;
+	"IPC-HDBW4231E-AS" | "IPC-HFW4231E-S" | "IPC-HFW4231B-BAS" | "IPC-HFW4231D-BAS" | "IPC-HDB4231C-AS" | "IPC-HDBW4231F-AS" | "IPC-HDW4231EM" | "IPC-HDW4231M" | "IPC-HFW4231S-S2" | "IPC-HUM8231P-E1" | "IPC-HDW4233C-S2" | "IPC-HDB4231C-M12" | "IPC-HDBW4231F-M12")
+		product=IPC-HF4231E
+		aewcfg=IPC-HF5231E
+		;;
+	"IPC-HFW4231M" | "IPC-HFW4231M-AS" | "IPC-HDW4231C-S2")
+		product=IPC-HF4231E
+		aewcfg=IPC-HFW4231M
+		;;
+	"IPC-HDBW4431E-AS" | "IPC-HFW4431E-S" | "IPC-HFW4431B-BAS" | "IPC-HFW4431D-BAS" | "IPC-HDB4431C-AS" | "IPC-HDBW4431F-AS" | "IPC-HDW4431EM" | "IPC-HDW4431M" | "IPC-HFW4431S-S2" | "IPC-HDW4431C-S2" | "IPC-HDB4431C-M12" | "IPC-HDBW4431F-M12")
+		product=IPC-HF4431E
+		aewcfg=IPC-HF5431E
+		;;
+	"IPC-EW4431-S" | "IPC-EW4431-SW" | "IPC-EW4431-ASW")
+		product=IPC-HF4431E
+		aewcfg=IPC-EW4431
+		;;
+	"IPC-HDBW5830R" | "IPC-HDW5830R-Z" | "IPC-HFW5830E-Z-0735" | "IPC-HFW5830E-Z" | "IPC-HFW5830E-ZH-0735" | "IPC-HFW5830E-ZH")
+		product=IPC-HDBW5830R
+		aewcfg=IPC-HFW4830E
+	;;
+	"IPC-HFW4530E-S")
+		product=IPC-HFW4530E
+		aewcfg=IPC-HFW4530E
+	;;
+	"IPC-HDW2231RP-ZS" | "IPC-HDBW2231R-Z" | "IPC-HDBW2231R-VF" | "IPC-HDBW2231R-Z" | "IPC-HDBW2231R-VF")
+		product=IPC-HF2231R
+		aewcfg=IPC-HF5231E
+	;;
+	"IPC-HDW2230RP-ZS" | "IPC-HDBW2230R-Z" | "IPC-HDBW2230R-VF" | "IPC-HDBW2230R-Z" | "IPC-HDBW2230R-VF" | "IPC-HFW1230SN" | "IPC-HDW1230SN")
+		product=IPC-HF2231R
+		aewcfg=IPC-HDW2230RP-ZS
+	;;
+	"IPC-HDW2431RP-ZS" | "IPC-HDBW2431R-Z" | "IPC-HDBW2431R-VF" | "IPC-HDBW2431R-Z" | "IPC-HDBW2431R-VF" | "IPC-HFW1431SN" | "IPC-HDW1431SN")
+		product=IPC-HF2431R
+		aewcfg=IPC-HF5431E
+	;;
+	"IPC-HFW4120R-Z-V2" | "IPC-HDBW4120R-Z-V2" | "IPC-HFW4120R-VF-V2" | "IPC-HDBW4120R-VF-V2")
+		product=IPC-HF4121E
+		aewcfg=IPC-HF5221E
+	;;
+esac
+
+if [ "$fvideo_chip" = "34" ];then
+	if  [ "$dspChip" = "24" ];then
+		product=IPC-HX4XX_Limit
+	fi
+fi
+
+#国内2系需要去掉部分智能功能
+if [ "$hwid_value" = "IPC-HDBW4220E:01:02:05:33:18:00:01:00:00:00:00:258:00:00:00:00:00:01:00:00:100" ];then
+	if [ -f /usr/data/Strings/SimpChinese.txt ];then
+		product=IPC-HX2220_Chn
+	fi
+fi
+
+echo product=$product
+
+if [ $cap_3g -eq 1 ];then
+	echo host > /proc/ambarella/usbphy0 
+	insmod /usr/lib/modules/usbserial.ko
+	insmod /usr/lib/modules/usb_wwan.ko
+	insmod /usr/lib/modules/option.ko
+	insmod /usr/lib/modules/usbnet.ko
+	insmod /usr/lib/modules/cdc_ether.ko
+	net3g&
+fi
+
+if [ "$product_name" = "IPC-HFW7226F-4G-V2" ];then
+	insmod /usr/lib/modules/scsi_mod.ko 
+	insmod /usr/lib/modules/sd_mod.ko
+	insmod /usr/lib/modules/usb-storage.ko
+fi
+
+if [ "$product" != "" ];then
+	cp -f /var/tmp/product/$product/* /var/tmp/pd/
+fi
+
+#创建/var/tmp/3A目录
+mkdir -p /var/tmp/3A
+
+if [ "$aewcfg" != "" ];then
+#现在所有的CC_08_3D.bin公用一个，减少flash占用
+	!(test -e "/var/tmp/2Acfg/$aewcfg/CC_08_3D.bin") && cp -f /var/tmp/2Acfg/IPC-Share/CC_08_3D.bin /var/tmp/2Acfg/$aewcfg/
+	!(test -e "/var/tmp/2Acfg/$aewcfg/WDR_CC_01_3D.bin") && cp -f /var/tmp/2Acfg/IPC-Share/WDR_CC_01_3D.bin /var/tmp/2Acfg/$aewcfg/
+	cp -f /var/tmp/2Acfg/$aewcfg/* /var/tmp/3A/
+	!(test -e "/mnt/mtd/3A/aew_para.zip") && cp /usr/data/aewParam/$aewcfg/aew_para.zip /mnt/mtd/3A/
+fi
+cp -f /var/tmp/2Acfg/reg.bin /var/tmp/3A/
+unzip /mnt/mtd/3A/aew_para.zip -d /var/tmp/3A > /dev/null
+
+#将打包中的aew_para赋值到内存中，以便进行版本比较，如果比flash的要新，则更换掉flash中的版本
+cp /usr/data/aewParam/$aewcfg/aew_para.zip /var/tmp/
+unzip /var/tmp/aew_para.zip -d /var/tmp > dev/null
+
+#根据不同的设备类型拷贝聚焦库配置
+#默认为手动镜头,其配置文件统一放入IPC-HF5100中
+afcfg=manual
+echo "Default manual len in manual"
+case "$product_name" in     
+        #电动镜头福光2.8-12mm,其配置文件统一放入fuguang0028-0120
+        "IPC-HDW2220R-Z"|"IPC-HFW5220E-Z"|"IPC-HDBW5221E-ZH"|"IPC-HDBW5220E-Z"|"IPC-HDBW5221EP-ZH"| \
+		"IPC-HDBW5220EP-Z"|"IPC-HDBW5220EP-ZH"|"IPC-HFW5220D-Z" | "IPC-HFW5220E-ZH" | "IPC-HDBW5221E-Z-A2" | \
+		"IPC-HDBW5121E-Z-A2-V2")
+        	if [ "$lens_type" = "1" ];then
+			afcfg=fuguang_nv_0028-0120
+		        cap_af="AF"
+		        echo "abf len in fuguang_nv_0028-0120"
+		elif [ "$lens_type" = "0" ];then
+			afcfg=fuguang0028-0120
+			cap_af="AF"
+			echo "FuGuang 2.8-12mm len in fuguang0028-0120"	
+		elif [ "$lens_type" = "2" ];then
+			afcfg=fuguang_nv_0035-0120
+			cap_af="AF"
+			echo "FuGuang 3.5-12mm len in fuguang_nv_0035-0120"	
+		elif [ "$lens_type" = "3" ];then
+			afcfg=fuguang_nv_0070-0220
+			cap_af="AF"
+			echo "FuGuang 7.0-22mm len in fuguang_nv_0070-0220"	
+		elif [ "$lens_type" = "4" ];then
+		   afcfg=fuguang_ir_0028-0120
+		   cap_af="AF"
+		   echo "abf len in fuguang_ir_0028-0120"
+		fi
+        	;;
+	#新的yutong二代镜头，其配置文件统一放入yutong0027-0120-6
+        "IPC-HFW5121D-Z" | "IPC-HDW2120R-Z"|"IPC-HFW5121E-Z"|"IPC-HDBW5121E-Z"|"IPC-HDBW5121E-ZH"|"IPC-HDB5121E-Z"|"IPC-HDBW5120E-Z"|"IPC-HDBW5121EP-Z"|"IPC-HDBW5121EP-ZH"|"IPC-HDBW5120EP-Z" | "IPC-HFW5120D-Z" | "IPC-HFW5120E-Z" | "IPC-HFW5121E-ZH" | "IPC-HDW4120R-Z" | "IPC-HFW2120R-ZS" | "IPC-HDBW2120R-ZS" | "IPC-HFW2121R-ZS" | \
+		"IPC-HFW4120R-ZAS" | "IPC-HFW4120R-Z" | "IPC-HDBW5121E-Z-A2" | "IPC-HDBW2121R-ZS")
+		if [ "$lens_type" = "0" ];then
+		       afcfg=yutong0027-0120-6
+		       cap_af="AF"
+		       echo "YuTong 2.7-12mm len in yutong0027-0120-6"
+		elif [ "$lens_type" = "3" ];then
+			   afcfg=fuguang_nv_0070-0220
+			   cap_af="AF"
+			   echo "FuGuang 7.0-22mm len in fuguang_nv_0070-0220"	
+	        fi
+		;;
+        "IPC-HF5120E" | "IPC-HF5121E" | "IPC-HF5221E" | "IPC-HF5421E" | "IPC-HF5220E" | "IPC-HF5121E-A2" | "IPC-HF5221E-A2" | "IPC-HF5421E-A2" | "IPC-HF5121E-V2")
+		afcfg=ABF
+		cap_af="AF"
+		echo "abf len in ABF"
+		;;
+	#fuguang3.5~12镜头设备
+        "IPC-HFW5221D-Z"|"IPC-HFW5221E-Z" | "IPC-HFW5221E-ZH" | "IPC-HFW5121E-Z-V2" | "IPC-HFW5121D-Z-V2" | "IPC-HFW5121E-ZH-V2")
+                if [ "$lens_type" = "2" ];then
+			afcfg=fuguang_nv_0035-0120
+		        cap_af="AF"
+		        echo "abf len in fuguang_nv_0035-0120"
+	        elif [ "$lens_type" = "0" ];then
+			   afcfg=fuguang0035-0120
+			   cap_af="AF"
+			   echo "FuGuang 2.8-12mm len in fuguang_nv_0035-0120"	
+		elif [ "$lens_type" = "3" ];then
+			   afcfg=fuguang_nv_0070-0220
+			   cap_af="AF"
+			   echo "FuGuang 7.0-22mm len in fuguang_nv_0070-0220"	
+			elif [ "$lens_type" = "4" ];then
+			   afcfg=fuguang_ir_0028-0120
+		       cap_af="AF"
+		       echo "abf len in fuguang_ir_0028-0120"
+	        fi
+		;;
+     	#fuguang_NV2.8~12镜头设备
+        "IPC-HDBW5421EP-Z"|"IPC-HDBW5421EP-ZH"|"IPC-HFW5421D-Z"|"IPC-HDBW5421E-Z"|"IPC-HDBW5421E-ZH"|"IPC-HDB5421E-Z"|"IPC-HFW5421E-Z" | "IPC-HFW5421E-ZH"|"IPC-HDW2320R-Z" | "IPC-HDW2421R-Z" | "IPC-HFW2320R-ZS" | "IPC-HDBW2320R-ZS" | \
+		"IPC-HFW4220R-ZAS" | "IPC-HFW4220R-Z" | "IPC-HFW2220R-ZS" | "IPC-HDBW2220R-ZS"  | "IPC-HDW4220R-Z" | "IPC-HDBW2320R-ZAS" | "IPC-HDBW5421E-Z-A2" | "IPC-HFW2320R-Z"|"IPC-HFW5431E-Z" | "IPC-HDW5431R-Z"|"IPC-HDBW5431R-Z" | "IPC-HFW2421R-ZS" | "IPC-HDBW2421R-ZS")
+		afcfg=fuguang_nv_0028-0120
+		cap_af="AF"
+		echo "abf len in fuguang_nv_0028-0120"
+		;;
+	#UNION_STEP_0047_0470镜头设备
+        "IPC-HFW5121E-CA-IRA"|"IPC-HFW5221E-CA-IRA"|"IPC-HFW5221D-CA"|"IPC-HFW5421E-CA-IRA")
+		afcfg=UNION_STEP_0047_0470
+		cap_af="AF"
+		echo "UNION len in UNION_STEP_0047_0470"
+		;;
+		
+	#fuguang_nv_0035-0120
+		"IPC-HFW8321EN-Z" | "IPC-HFW8221EN-Z" | "IPC-HDBW8321EN-Z" | "IPC-HDBW8221EN-Z"|"IPC-HFW5231E-Z" | "IPC-HDW5231R-Z"|"IPC-HDBW5231R-Z" | "IPC-HFW2221R-ZS" | "IPC-HDBW2221R-ZS" | "IPC-HFW2121R-ZS-V2" | "IPC-HDBW2121R-ZS-V2" | "IPC-HFW4120R-Z-V2" | "IPC-HDBW4120R-Z-V2")
+			afcfg=fuguang_nv_0035-0120
+		    cap_af="AF"
+		    echo "abf len in fuguang_nv_0035-0120"
+		;;
+	#原信息出错，以下型号修改type=1 定义
+        "IPC-HDBW5221E-Z"|"IPC-HDBW5221EP-Z"|"IPC-HDB5221E-Z"|"IPC-HDBW5121E-Z-V2"|"IPC-HDB5121E-Z-V2"|"IPC-HDBW5121EP-Z-V2")
+                if [ "$lens_type" = "1" ];then
+			afcfg=fuguang_nv_0035-0120
+		        cap_af="AF"
+		        echo "abf len in fuguang_nv_0035-0120"
+	        elif [ "$lens_type" = "0" ];then
+				afcfg=fuguang0028-0120
+				cap_af="AF"
+				echo "FuGuang 2.8-12mm len in fuguang0028-0120"	
+			elif [ "$lens_type" = "4" ];then
+			   afcfg=fuguang_ir_0028-0120
+		       cap_af="AF"
+		       echo "abf len in fuguang_ir_0028-0120"
+	        fi
+		;;
+	#manual镜头设备
+	    "IPC-HDP5121E"|"IPC-HDP5221E"|"IPC-HDP5421E"|"IPC-HDPW5121E"|"IPC-HDPW5221E"|"IPC-HDPW5421E"|"IPC-HFW2120R-VFS"|"IPC-HFW2220R-VFS"|"IPC-HFW2320R-VFS" | "IPC-HFW2421R-VFS" |\
+		"IPC-HFW4120R-VFAS" | "IPC-HFW4120R-VF" | "IPC-HFW4220R-VFAS" | "IPC-HFW4220R-VF" | "IPC-HDBW4120R-VFAS" | "IPC-HFW2121R-VFS" | "IPC-HFW2221R-VFS" | "IPC-HFW2421R-VFS" | \
+		"IPC-HDPW5121E-V2" | "IPC-HDP5121E-V2" | "IPC-HFW2121R-VFS-V2" | "IPC-HFW4120R-VF-V2" | "IPC-HDBW2121R-VFS-V2" | "IPC-HDBW4120R-VF-V2" | "IPC-HDBW2221R-VFS")
+		afcfg=manual
+		cap_af="AF"
+		echo "manual len in manual"
+		;;
+		
+        #带云台,不会启动AF,不需要配置文件
+		"IPC-HD4200-PT" | "IPC-HD4100-PT")
+        	afcfg=
+        	echo "Not support AF"
+        	;;
+esac
+echo    $afcfg
+echo    $product_name
+if [ "$afcfg" != "" ];then
+	cp -f /var/tmp/2Acfg/$afcfg/af_cfg.bin /mnt/mtd/3A/
+fi
+
+#复制云台相关配置文件
+if [ "$ptzcfg" != "" ];then
+	echo ptzcfg=$ptzcfg
+	cp -f /var/tmp/ptzcfg/$ptzcfg.bin /var/tmp/ptz_cfg.bin
+fi
+if [ "$ptzcal" != "" ];then
+	echo ptzcal=$ptzcal
+	cp -f /var/tmp/ptzcfg/$ptzcal.bin /var/tmp/ptz_cal.bin
+fi
+
+#删除临时目录
+rm -rf /var/tmp/product
+rm -rf /var/tmp/2Acfg
+rm -rf /var/tmp/ptzcfg
+
+#exit 0
+#configuration
+
+cap_ex2=""
+grep '\"MaxExtraStream\" : 2' /usr/data/ProductInfo > /dev/null
+if [ "$?" = "0" ];then
+cap_ex2="EX2"
+fi
+
+#是否为智能标记位，0表示非智能，1表示智能,由\Specialities\Intelligent\IVS下的build.cfg进行修改
+Is_IVS=1
+cap_dsp="DSP"
+if [ $Is_IVS -eq 0 ];then
+	cap_dsp=""
+fi
+echo cap_dsp = $cap_dsp
+
+echo "AEWB $cap_dsp $cap_ex2 $cap_vout $cap_af $cap_motor" > /var/tmp/sonia_para
+
+if [ "$product_name" = "IPC-KW10W-0280B-ZH" ];then
+    	sleep 3
+	insmod /usr/lib/modules/g_ether.ko
+	netinit if=eth0 default
+fi
+
+if [ $cap_wifi -ne 0 ];then
+	ifconfig eth2 up
+	
+if [ "$product_name" = "IPC-C15" ] || [ "$product_name" = "IPC-C35" ] || [ "$product_name" = "IPC-C15-CE" ];then
+	netinit if=eth2 default
+else
+	netinit if=eth2
+fi
+#	/usr/bin/wpa_supplicant -g/var/tmp/wpa_supplicant-global -P/var/tmp/eth2.pid &
+fi
+
+if [ -f "/home/test.sh" ];then
+	/home/test.sh &
+fi
+

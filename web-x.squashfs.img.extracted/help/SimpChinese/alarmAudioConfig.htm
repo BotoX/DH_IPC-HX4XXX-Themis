@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body onload="alarmSetHelp()">
+    <div class="detailBox">
+        <h1>
+            音频检测
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>参数项</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td class="wid80">音频通道</td>
+                <td>音频通道列出当前设备的所有音频通道，选择不同的音频通道，下面的内容将显示为当前的通道信息。</td>
+            </tr>
+            <tr>
+                <td class="wid80">灵敏度</td>
+                <td>1-100 级可调，该数值越小，则输入声音音量变化超过持续环境音量更多才能被判断为音频异常，用户需要根据实际环境测试调节。</td>
+            </tr>
+            <tr>
+                <td class="wid80">声音突变阈值</td>
+                <td>1-100 级可调，用于设置过滤的环境声音强度，如果环境噪音越大，则该值需要设置的越高，用户需要根据实际环境测试调节。</td>
+            </tr>
+        </table>
+        <p class="noiceC">
+            注：其余项见
+            <a href="videoDetectConfig.htm" class="linka">动态检测</a>
+            。
+        </p>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

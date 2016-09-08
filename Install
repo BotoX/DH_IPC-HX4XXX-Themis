@@ -1,0 +1,22 @@
+{
+   "Commands" : [
+      "burn dhboot-min.bin.img bootloader",
+      "burn dhboot.bin.img bootloader",
+      "burn kernel.img kernel",
+      "burn partition-x.cramfs.img partition",
+      "burn romfs-x.squashfs.img rootfs",
+      "burn pd-x.squashfs.img pd",
+      "burn user-x.squashfs.img user",
+      "burn custom-x.squashfs.img custom",
+      "burn web-x.squashfs.img web",
+      "burn user1-x.squashfs.img user1"
+   ],
+   "Devices" : [
+      [ "SD6XXX", "1.00" ],
+      [ "IPC-HX3XXX", "1.00" ],
+      [ "IPC-HX4XXX", "1.00" ],
+      [ "IPC-HX5XXX", "1.00" ],
+      [ "IPC-HX8XXX", "1.00" ]
+   ],
+   "Vendor" : "General"
+}

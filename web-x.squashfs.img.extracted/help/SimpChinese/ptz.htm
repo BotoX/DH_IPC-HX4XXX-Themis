@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../../css/ui.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/skin.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/fn.css" type="text/css" rel="stylesheet"/>
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body onload="ptzHelp()">
+    <div class="detailBox">
+        <h1>
+            云台
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：</span>
+            仅支持以下能力的设备才具有相对应的功能。
+        </p>
+        <ul class="listul">
+            <li class="help-minh35">
+                <p class="p1">
+                    <span class="fn-left">1.</span>
+                    <a class="ui-ptz-specail-icon" href="javascript:;">
+                        <i class="ui-ptz-icon-center"></i>
+                    </a>
+                    快速定位的功能。用鼠标在监视画面画出一个框，云台会旋转和变焦快速定位到该场景。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <span class="fn-left">2.</span>
+                    步长主要用于速度操作。步长越大，速度越快。步长对云台方向控制、变倍、变焦和光圈调节有效。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <span class="fn-left">3.</span>
+                    云台设置提供线性扫描、预置点、巡航组、巡迹等设置功能。
+                </p>
+            </li>
+            <li id="joystick">
+                <p class="p1">
+                    <span class="fn-left">4.</span>
+                    虚拟摇杆功能是通过拖动中间的按钮模拟出摇杆的操作，来控制设备的转动。
+                </p>
+            </li>
+            <li>
+                <table class="Table" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th>参数项</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td class="wid80">线性扫描</td>
+                        <td>
+                            <p class="normalP1">
+                                <span class="kuai">■</span>
+                                点击“设置”按钮，可以设置线性扫描边界。
+                            </p>
+                            <p class="normalP1">
+                                <span class="kuai">■</span>
+                                再通过方向按钮移动到想要的左/右边界，并点击“设置左/右边界按钮”确定摄像头左/右边界位置，完成线扫路线的设置。
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="wid80">预置点</td>
+                        <td>
+                            <p class="normalP1">
+                                <span class="kuai">■</span>
+                                在输入框输入预置点值，点击“查看”按钮，摄像头转至该预置点所对应的位置。
+                            </p>
+                            <p class="normalP1">
+                                <span class="kuai">■</span>
+                                通过方向按钮转动摄像头至需要的位置，在预置点输入框中输入预置点值并点击“增加”按钮设下一个预置点，预置点号范围与具体云台协议有关。
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="wid80">巡航组</td>
+                        <td>
+                            <p class="normalP1">
+                                <span class="kuai">■</span>
+                                先在巡航组输入框中输入巡航路线值，点击“增加”按钮。设置范围具体与云台协议有关。
+                            </p>
+                            <p class="normalP1">
+                                <span class="kuai">■</span>
+                                再在预置点输入框中输入预置点值，点击“增加预置点”按钮，即为在该点间巡航组中增加了一个预置点。若点击“删除预置点”按钮，则在该点间巡航路线中删除该预置点。
+                            </p>
+                            <p class="noiceC">注：可多次操作以增加多个预置点，也可删除多个已存在于该巡航组的预置点。</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="wid80">巡迹</td>
+                        <td>
+                            先在巡迹输入框中输入巡迹序号值，点击“增加”按钮。然后点击“开始记录”按钮，然后进行变倍、变焦、光圈或方向等一系列的操作，之后再回到云台设置所示菜单，点击“停止记录”按钮，完成一条巡迹路线的设置。
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="wid80">辅助功能</td>
+                        <td>在辅助输出框中输入辅助功能的值，点击“辅助开”按钮开启对应的辅助功能，点击“辅助关”按钮关闭对应的辅助功能。</td>
+                    </tr>
+
+                    <tr>
+                        <td class="wid80">灯光雨刷</td>
+                        <td>选择开启或关闭灯光雨刷。</td>
+                    </tr>
+                    <tr id = 'help_ptz_move'>
+                        <td class="wid80">精确定位</td>
+                        <td>输入需要的水平角度、垂直角度和变倍参数，点击“定位”按钮即可精确定位到某点。每单位的水平角度、垂直角度参数代表0.1度。</td>
+                    </tr>
+                    <tr id = 'help_ptz_pan'>
+                        <td class="wid80">水平旋转</td>
+                        <td>开始或停止摄像头的水平旋转。</td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                <p class="noiceC">
+                    <span class="bold">注：</span>
+                    使用云台控制台之前，用户必须先设置云台协议。
+                    <br/>
+                </p>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

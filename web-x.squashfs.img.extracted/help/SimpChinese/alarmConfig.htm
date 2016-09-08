@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body onload="alarmSetHelp()">
+    <div class="detailBox">
+        <h1>
+            报警设置
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：
+            仅支持以下能力的设备才具有相对应的功能。
+            </span>
+        </p>
+        <h2>PIR报警</h2>
+        <p class="noiceC">
+            注：请参考
+            <a href="videoDetectConfig.htm" class="linka">动态检测</a>。
+        </p>
+        <h2>无线报警</h2>
+        <p class="noiceC">
+            注：请参考
+            <a href="videoDetectConfig.htm" class="linka">动态检测</a>。
+        </p>
+        <h2>音频检测</h2>
+        <p class="noiceC">
+            注：请参考
+            <a href="videoDetectConfig.htm" class="linka">动态检测</a>。
+        </p>
+        <h2>紧急呼叫</h2>
+        <p class="noiceC">
+            注：请参考
+            <a href="videoDetectConfig.htm" class="linka">动态检测</a>。
+        </p>
+        <h2>报警联动</h2>
+        <p class="detailP"> <strong>传感器类型</strong>
+            ：有常开型和常闭型两种，从常开切换到常闭，开启报警，从常闭切换到常开，关闭报警。
+        </p>
+        <p class="noiceC">
+            注：其余项见
+            <a href="videoDetectConfig.htm" class="linka">动态检测</a>
+            。
+        </p>
+        <h2 id="flash_Set_title">补光灯设置</h2>
+        <table class="Table" cellpadding="0" cellspacing="0" id="flash_Set">
+            <tr>
+                <th>参数项</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td class="wid80">使能</td>
+                <td>当显示为ON时，则补光灯开启。同时滑块越靠近强，则补光灯越亮。</td>
+            </tr>
+            <tr>
+                <td class="wid80">时间</td>
+                <td>设置补光灯生效的时间段。需同时设置星期和时间段，才能成功保存时间设置。</td>
+            </tr>
+        </table>
+
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

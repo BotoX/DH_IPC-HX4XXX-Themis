@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            AD&LDAP
+            <a href="javascript:;" class="righBut" onClick="back()">返回目录</a>
+        </h1>
+        <h2>AD&LDAP介绍</h2>
+        <p class="detailP">
+            LDAP是轻量目录访问协议，全称为：Lightweight Directory Access Protocol。
+    主要用于设备登陆时做用户权限校验，不同系统之间可以共用LDAP服务器上现成已有的账号登陆设备，
+    方便管理员对系统账号进行管理，不同系统之间同步账号的作用。
+        </p>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">服务器</td>
+                <td>存储目标授权用户信息和校验用户信息的主机。</td>
+            </tr>
+            <tr>
+                <td class="wid80">选择用户</td>
+                <td>勾选后即可在登录界面选择相应的用户登录。</td>
+            </tr>
+            <tr>
+                <td class="wid80">端口</td>
+                <td>默认端口为389，端口范围为1-65535，不建议使用1-1025范围内的端口，以防与其他端口冲突。</td>
+            </tr>
+            <tr>
+                <td class="wid80">搜索用户起始DN</td>
+                <td>DN是用户在LDAP域的唯一路径，设置搜索用户起始DN，可缩短搜索用户的时间。</td>
+            </tr>
+            <tr>
+                <td class="wid80">匿名绑定</td>
+                <td>匿名绑定使能勾选时，无需填写绑定DN和绑定密码。</td>
+            </tr>
+            <tr>
+                <td class="wid80">绑定DN</td>
+                <td>DN长度最多为64个字符，只能为数字、字母，逗号，等号、下划线。</td>
+            </tr>
+            <tr>
+                <td class="wid80">绑定密码</td>
+                <td>密码可填写0-32位，只能为数字和字母。</td>
+            </tr>
+            <tr>
+                <td class="wid80">LDAP 过滤</td>
+                <td>通过指定DN条件，过滤冗余信息，快速搜索用户。</td>
+            </tr>
+        </table>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

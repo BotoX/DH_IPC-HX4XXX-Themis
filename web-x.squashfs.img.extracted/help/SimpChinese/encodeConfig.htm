@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../../css/ui.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/main.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/skin.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/fn.css" type="text/css" rel="stylesheet"/>
+	<link href="../../css/playback.css" type="text/css" rel="stylesheet"/>
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body onload="encodeHelp()">
+    <div class="detailBox">
+        <h1>
+            视频
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：</span>
+            仅支持以下能力的设备才具有相对应的功能。
+        </p>
+        <h2>视频码流</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">码流类型</td>
+                <td>
+                    <span class="kuai">■</span>
+                    活动帧率控制（ACF）功能，使用不同帧率进行录像，针对重要事件使用高帧率录像，对于定时事件使用低帧率录像。动态检测录像和报警录像的帧率可单独设置。
+                    <br/>
+                    <span class="kuai">■</span>
+                    包括普通码流，动检码流，报警码流三种编码码流。针对不同的录像事件选择不同的编码码流。
+                    <br/>
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">编码模式</td>
+                <td>
+                    <span class="kuai">■</span>
+                    <span class="yellow">H.264  ：</span>
+                    Main Profile编码方式。
+                    <br/>
+                    <span class="kuai">■</span>
+                    <span class="yellow">H.264H  ：</span>
+                    High Profile编码方式。
+                    <br/>
+                    <span class="kuai">■</span>
+                    <span class="yellow">H.264B ：</span>
+                    Baseline Profile编码方式。
+                    <br/>
+                    <span class="kuai">■</span>
+                    <span class="yellow">MJPEG ：</span>
+                    这种编码模式下视频画面需要较高的码流值才能保证图像的清晰度，为了使视频画面达到较佳效果，建议使用相应参考码流值中的最大码流值。
+                    <br/>
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">分辨率</td>
+                <td>
+                    包括多种分辨率类型，每种对应的推荐码流值不同。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">帧率（FPS）</td>
+                <td>P制：1～50帧/秒，N制：1～60帧/秒。帧率会随分辨率的不同而变化。</td>
+            </tr>
+            <tr>
+                <td class="wid80">码流控制</td>
+                <td>
+                    <span class="kuai">■</span>
+                    仅在可变码流模式下设置画质，在固定码流模式下不可设置画质。
+                    <br/>
+                    <span class="kuai">■</span>
+                    在MJPEG编码模式下，码流控制方式只能为固定码流。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">码流</td>
+                <td>在可变码流模式下，该值是码流的上限，在固定码流模式下，该值是固定值</td>
+            </tr>
+            <tr>
+                <td class="wid80">I帧间隔</td>
+                <td>两个I帧之间的P帧数量，范围为所设帧率的大小到最大值150，建议设置为帧率的2倍。</td>
+            </tr>
+            <tr>
+                <td class="wid80">SVC</td>
+                <td>帧率可分层编码，是一种时域上的可伸缩性编码方式
+默认为1，即不分层。可设置分2、3、4层编码设置</td>
+            </tr>
+            <tr>
+                <td class="wid80">水印设置</td>
+                <td>
+                    <span class="kuai">■</span>
+                    通过校验水印字符，看录像是否被篡改。
+                    <br/>
+                    <span class="kuai">■</span>
+                    水印字符只能为数字、字母、下划线、中划线，且最长为128个字符。
+                </td>
+            </tr>
+        </table>
+        <h2>图片码流</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">抓图类型</td>
+                <td>
+                    <span class="kuai">■</span>
+                    普通抓图指在时间表设定的范围内进行抓图。
+                    <br/>
+                    <span class="kuai">■</span>
+                    触发抓图指在触发动态检测、视频遮挡、本地报警后进行抓图。
+                    <br/>
+                    <p class="more"> <b>其前提条件为：</b>
+                        <br/>
+                        1.在时间表设定的范围内。
+                        <br/>
+                        2.动态检测、视频遮挡、本地报警使能以及相应抓图使能均开启。
+                        <br/>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">图片大小</td>
+                <td>普通抓图和触发抓图下的图片大小均与主码流分辨率保持一致。</td>
+            </tr>
+            <tr>
+                <td class="wid80">图片质量</td>
+                <td>可选择图片质量为最好，更好，好，差，更差，最差这6个级别。</td>
+            </tr>
+            <tr>
+                <td class="wid80">抓图速度</td>
+                <td>普通抓图和触发抓图时抓图的速率。</td>
+            </tr>
+        </table>
+        <h2>视频叠加</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">区域遮盖</td>
+                <td>
+                    <span class="kuai">■</span>
+                    开启则在视频监视窗口中显示遮挡块，关闭即不显示。
+                    <br/>
+                    <span class="kuai">■</span>
+                    可进行区域块设置，最多可设置4个区域。
+                </td>
+            </tr>
+            <tr>
+                <td  class="wid80">通道标题</td>
+                <td>
+                    <span class="kuai">■</span>
+                    开启则在视频监视窗口中显示通道标题，关闭即不显示。
+                    <br/>
+                    <span class="kuai">■</span>
+                    可通过拖动“通道标题”框来调整通道标题的位置。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">时间标题</td>
+                <td>
+                    <span class="kuai">■</span>
+                    开启则在视频监视窗口中显示时间标题，关闭即不显示。
+                    <br/>
+                    <span class="kuai">■</span>
+                    可通过拖动“时间标题”框来调整时间标题的位置。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">地理位置</td>
+                <td>
+                    <span class="kuai">■</span>
+                    开启则在视频监视窗口中显示地理位置，关闭即不显示。
+                    <br/>
+                    <span class="kuai">■</span>
+                    可通过拖动“地理位置”框来调整地理位置的位置。对齐方式包括左对齐和右对齐。
+                </td>
+            </tr>
+			<tr>
+                <td class="wid80">图片叠加</td>
+                <td>
+                    <span class="kuai">■</span>
+                    开启则在视频监视窗口中显示叠加的图片，关闭即不显示。
+                    <br/>
+                    <span class="kuai">■</span>
+                    点击上传图片，可将本地的图片叠加到视频监视窗口中。可通过拖动黄色框来调整叠加图片的位置。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">刷新</td>
+                <td>设置区域遮挡块、通道标题、时间标题、地理位置、图片叠加保存成功后，可通过刷新按钮查看设置后的效果。</td>
+            </tr>
+        </table>
+		<p class="noiceC">
+			<span class="bold">注：</span>
+			地理位置和图片叠加不能同时开启。
+		</p>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

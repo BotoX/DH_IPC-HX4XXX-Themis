@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            摄像头属性
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：</span>
+            仅支持以下能力的设备才具有相对应的功能。
+        </p>
+        <h2>配置文件</h2>
+        <p class="detailP">可选择普通、白天或夜晚模式，选择模式后可设置及查看相应模式下的配置及效果。</p>
+        <h2>配置文件管理</h2>
+        <p class="detailP">与配置文件配合，按实际场景选择需要使用的普通、白天、夜晚模式。</p>
+        <h2>亮度</h2>
+        <p class="detailP">该阈值主要是通过线性的调节方式调节图像的整体亮度。值越大图像越亮，反之相反。该值设的较大时，图像容易发朦。默认值为50，推荐值40~60。</p>
+        <h2>对比度</h2>
+        <p class="detailP">
+            该阈值主要是调节图像的对比度。值越大图像明亮反差越大，反之越小。值设的过大时，图像暗的地方太暗，亮的地方容易过曝。设的太小时，图像会发朦。默认值为50，推荐值40~60。
+        </p>
+        <h2>饱和度</h2>
+        <p class="detailP">该阈值主要调整颜色深浅。值越大彩色将更浓，反之相反。该阈值不会影响图像的整体亮度。默认值为50，推荐值40~60。</p>
+        <h2>锐度</h2>
+        <p class="detailP">
+            该阈值主要是调节图像边缘的锐利程度。值越大边缘越明显，反之相反。该值设得较大时，图像容易产生噪声。默认值为50，推荐值40~60。
+        </p>
+		<h2>伽马</h2>
+        <p class="detailP">
+            该阈值主要是通过非线性的调节方式改变图像亮度，提高图像的动态显示范围。值越大图像越亮，反之相反。默认值为50，推荐值40~60。
+        </p>
+		<h2>镜像</h2>
+        <p class="detailP">启用则改变视频监视图像的左、右方向。默认不启用。</p>
+        <h2>视角</h2>
+        <p class="detailP">使用该功能可改变视频监视图像的方向。默认正常模式。</p>
+        <h2>防闪烁</h2>
+        <p class="detailP disindent">
+            <table class="Table" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="wid80">50HZ</td>
+                    <td>在市电为50HZ的情况下，根据场景亮度，自动调整曝光的同时，确保图像不出现横条纹。</td>
+                </tr>
+                <tr>
+                    <td class="wid80">60HZ</td>
+                    <td>
+                        在市电为60HZ的情况下，根据场景亮度，自动调整曝光的同时，确保图像不出现横条纹。
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="wid80">室外</td>
+                    <td>
+                        该模式下可切换曝光模式，达到相应曝光模式下的效果。
+                        <br/>
+                    </td>
+                </tr>
+            </table>
+        </p>
+        <h2>曝光模式</h2>
+        <p class="detailP disindent">
+			<p class="detailP">曝光模式包括：自动、增益优先、快门优先、光圈优先和手动。</p>
+            <table class="Table" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="wid80">自动</td>
+                    <td>图像的整体亮度在正常曝光范围内根据不同场景亮度自动调整。</td>
+                </tr>
+                <tr>
+                    <td class="wid80">增益优先</td>
+                    <td>
+                        图像的整体亮度，在正常曝光范围内根据不同场景亮度，优先根据设置的增益范围自动调整。
+						若图像亮度还是不恰当，同时增益已经达到范围上下限，再自动调节快门值，使得画面正常。
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="wid80">快门优先</td>
+                    <td>
+						图像的整体亮度，在正常曝光范围内根据不同场景亮度，优先根据设置的调整快门范围自动调整。
+						若图像亮度还是不恰当，同时增益已经达到范围上下限，再自动调节增益值，使得画面正常。
+                        <br/>
+                    </td>
+                </tr>
+				<tr>
+                    <td class="wid80">光圈优先</td>
+                    <td>
+						固定光圈为设置的数值，按照优先驱动曝光时间再驱动增益的方式自动实现亮度的最佳。
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="wid80">手动</td>
+                    <td>
+                        手动曝光模式下可以手动调节增益值和快门值。
+						增益范围0-100可调，快门值支持从1/100000到1/3，以及自定义区间，支持长曝光。
+                    </td>
+                </tr>
+            </table>
+            <p class="noiceC">注：仅在防闪烁为室外模式时可切换曝光模式。</p>
+        </p>
+        <h2>自动光圈</h2>
+        <p class="detailP">自动光圈开关，默认为启用。</p>
+        <p class="noiceC">
+            <span class="bold">注：</span>
+            针对接上自动光圈镜头的设备有效。
+        </p>
+		<h2>3D降噪</h2>
+        <p class="detailP">3D降噪主要是针对多帧（至少两帧）图像进行处理，利用视频的前后帧之间的帧间信息来进行降噪。数值越大，效果越好。</p>
+        <h2>背光</h2>
+        <p class="detailP disindent">
+			<p class="detailP">背光补偿开关，一般用于逆光的场景。</p>
+            <table class="Table" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="wid80">背光补偿</td>
+                    <td>
+						<span class="kuai">■</span>
+                        默认背光补偿：根据所处场景自动进行曝光，以看清图像中最暗的区域为目标。
+                        <br/>
+						<span class="kuai">■</span>
+                        自定义背光补偿：选择自定义区域后，整个画面以所选区域进行曝光，以矩形框内的区域达到合适的亮度为目标。
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="wid80">宽动态</td>
+                    <td>对于宽动态场景，该功能可以将高亮区亮度降低，低亮度区域亮度提高，尽量使高亮和低亮区域景物都能看清。</td>
+                </tr>
+                <tr>
+                    <td class="wid80">强光抑制</td>
+                    <td>打开强光抑制功能，随着强光抑制等级的增加，画面会抑制高亮区域的亮度，减小光晕区域的大小，整个画面亮度降低。</td>
+                </tr>
+            </table>
+        </p>
+		<h2>白平衡</h2>
+        <p class="detailP disindent">
+			<p class="detailP">设置白平衡的模式。主要是影响图像的整体色调。默认为自动模式。</p>         
+            <table class="Table" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="wid80">自动</td>
+                    <td>自动设置白平衡，能自动对不同的色温进行白平衡的补偿，使图像颜色正常。</td>
+                </tr>
+                <tr>
+                    <td class="wid80">自然光</td>
+                    <td>能自动对没有人造光的场景进行白平衡的补偿，使图像颜色正常。</td>
+                </tr>
+                <tr>
+                    <td class="wid80">路灯</td>
+                    <td>能自动对夜晚的室外场景进行白平衡的补偿，使图像颜色正常。</td>
+                </tr>
+                <tr>
+                    <td class="wid80">室外</td>
+                    <td>能自动对大部分含有自然光和人造光的室外场景进行白平衡的补偿，使图像颜色正常。</td>
+                </tr>
+                <tr>
+                    <td class="wid80">手动</td>
+                    <td>可以手动设置红色、蓝色通道的增益，取值范围为0-100。</td>
+                </tr>
+            </table>
+        </p>
+        <h2>日/夜模式</h2>
+        <p class="detailP disindent">			
+            <p class="detailP">设置图像的彩色黑白模式，默认为自动。</p> 
+            <table class="Table" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="wid80">彩色</td>
+                    <td>相机将只输出彩色图像。</td>
+                </tr>
+                <tr>
+                    <td class="wid80">自动</td>
+                    <td>根据设备图像的整体亮度选择输出彩色或者黑白图像。</td>
+                </tr>
+                <tr>
+                    <td class="wid80">黑白</td>
+                    <td>相机将只输出黑白图像。</td>
+                </tr>
+            </table>
+        </p>
+		<h2>灵敏度、延时</h2>
+		<p class="detailP">
+            可以调节彩色黑白切换的灵敏度和延时值。默认值为中，延时为6。
+        </p>
+		<h2>补光灯</h2>
+		<table class="Table" cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="wid80">手动</td>
+				<td>
+					<span class="kuai">■</span>
+					单路红外控制设备，手动模式下，红外灯由中光灯的数值控制，范围为0-100，默认值50。
+					<br/>
+					<span class="kuai">■</span>					
+				    双路红外控制设备，手动模式下，红外灯由近光灯与远光灯控制，范围为0-100，默认值50。
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="wid80">自动</td>
+				<td>自动调节红外灯。</td>
+			</tr>
+			<tr>
+				<td class="wid80">关闭</td>
+				<td>关闭红外灯。</td>
+			</tr>
+		</table>
+        <h2>电子防抖</h2>
+        <p class="detailP">通过图像差值比较算法实现电子抗抖动功能，有效解决使用过程中图像抖动问题，使高清画面更加清晰。</p>
+        <h2>透雾模式</h2>
+        <p class="detailP">设备在有雾、霾的环境中图像质量会下降，自动模式下图像进行自动矫正。也可以根据雾的浓度，手动选择不同的强度，以此来调节图像的清晰度。</p>
+    </div>
+    <div class="detailBox">
+        <h1>聚焦缩放</h1>
+        <h2>缩放</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">缩小</td>
+                <td>按减号键使视频的焦距缩小</td>
+            </tr>
+            <tr>
+                <td class="wid80">放大</td>
+                <td>按加号键使视频的焦距放大</td>
+            </tr>
+            <tr>
+                <td class="wid80">步长</td>
+                <td>步长包括1，5，20</td>
+            </tr>
+        </table>
+        <h2>聚焦</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">近</td>
+                <td>按减号键使镜头的焦平面向近景移动</td>
+            </tr>
+            <tr>
+                <td class="wid80">远</td>
+                <td>按加号键使镜头的焦平面向远景移动</td>
+            </tr>
+            <tr>
+                <td class="wid80">步长</td>
+                <td>步长包括1，5，20</td>
+            </tr>
+        </table>
+        <h2>全部重置</h2>
+        <p class="detailP">全部重置，缩放和聚焦的值均重置为0。</p>
+        <h2>自动聚焦</h2>
+        <p class="detailP">调节镜头的焦平面使视频图像处于最清晰。</p>
+        <h2>刷新</h2>
+        <p class="detailP">获取缩放聚焦的最新状态。</p>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

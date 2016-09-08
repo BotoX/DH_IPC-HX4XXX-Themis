@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            视频检测
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="detailP">视频检测包含动态检测和视频遮挡两种事件类型。</p>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <th >参数项</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td class="wid80">启动</td>
+                <td>打勾表示选中，勾选后才能进行动态检测或视频遮挡报警。</td>
+            </tr>
+            <tr>
+                <td class="wid80">布撤防时间段</td>
+                <td>
+                    1、设置报警的时间段，在设置的时间范围内才会启动报警事件。
+                    <br />
+                    2、每天有六个时间段供设置，选中时间段前面的复选框，设置的时间才有效。
+                    <br />
+                    3、选择星期数（默认选择星期日；如果选择全周，则表示将设置应用整个星期；也可选择星期数前面的复选框，对某几天进行单独设置）。
+                    <br />
+                    4、设置完毕点确定按钮，回到动态检测设置页面，点击确定按钮完成动态检测时间段设置。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">去抖动</td>
+                <td>表示在该去抖动时间段内只记录一次动态检测事件，时间以秒为单位，选择范围在0～100S之间。</td>
+            </tr>
+            <tr>
+                <td class="wid80">设置区域</td>
+                <td>
+                    点击设置按钮进入，可根据实际情况设置动态检测的有效区域，并可分别设置其灵敏度及面积阈值(灵敏度越大越容易产生动检,面积阈值越小越容易产生动检)，默认情况下所有视频范围均为动态检测的有效区域。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">录像</td>
+                <td>
+                    打勾表示选中，发生本地报警时，系统自动进行报警录像。同时要在“
+                    <a href="recordPlanConfig.htm"  class="linka">存储管理-时间表</a>
+                    ”中设置报警的录像时间段，同时在录像控制界面中选择自动录像。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">录像延时</td>
+                <td>表示当报警结束时，报警录像延长一段时间停止，时间以秒为单位，范围在10～300s之间。</td>
+            </tr>
+
+            <tr>
+                <td class="wid80">报警输出</td>
+                <td>打勾表示选中，启动报警联动输出端口，发生报警时可联动相应报警输出设备。</td>
+            </tr>
+            <tr>
+                <td class="wid80">报警延时</td>
+                <td>表示报警结束后，报警延长一段时间停止，时间以秒为单位，范围在10～300S之间。</td>
+            </tr>
+            <tr>
+                <td class="wid80">发送邮件</td>
+                <td>
+                    打勾表示选中，报警发生时同时发送邮件通知用户，用户可在“
+                    <a href="emailConfig.htm"  class="linka">网络设置—SMTP(邮件)</a>
+                    ”中设置自己的邮箱地址。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">云台</td>
+                <td>打勾表示选中，报警发生时，联动云台动作。如联动转至预置点X。云台配置的事件类型包括：预置点、点间巡航、巡迹等。</td>
+            </tr>
+            <tr>
+                <td class="wid80">抓图</td>
+                <td>
+                    打勾表示选中，发生报警时，系统自动进行报警抓图。同时要在“
+                    <a href="recordPlanConfig.htm"  class="linka">存储管理-时间表</a>
+                    ”中设置报警的抓图时间段。
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

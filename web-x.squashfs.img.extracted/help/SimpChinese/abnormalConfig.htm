@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            异常处理
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：</span>
+            仅支持以下能力的设备才具有相对应的功能。
+        </p>
+        <h2>异常处理介绍</h2>
+        <p class="detailP">异常处理包含无SD卡、SD卡空间不足、SD卡出错、网络断开、IP冲突、非法访问六个报警事件。</p>
+        <h2>SD卡异常</h2>
+        <p class="detailP">当无SD卡、SD卡空间不足或SD卡出错时，会产生SD卡异常报警事件。</p>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>参数项</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td class="wid80">启动</td>
+                <td>打勾表示选中，勾选后才会进行SD卡异常报警。</td>
+            </tr>
+            <tr>
+                <td class="wid80">报警输出</td>
+                <td>打勾表示选中，启动报警联动输出端口，发生报警时可联动相应报警输出设备。</td>
+            </tr>
+            <tr>
+                <td class="wid80">输出延时</td>
+                <td>
+                    表示报警结束后，报警延长一段时间停止，时间以秒为单位，范围在10～300S之间。
+                    <br/>
+                    <p class="noiceC">
+                        <span class="bold">注：无SD卡，SD卡空间不足，SD卡出错，报警延时均从报警开始时算起。</span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">发送邮件</td>
+                <td>
+                    打勾表示选中，报警发生时同时发送邮件通知用户，用户可在“
+                    <a href="emailConfig.htm"  class="linka">网络设置—SMTP(邮件)</a>
+                    ”中设置自己的邮箱地址 。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">SD卡空间容量下限</td>
+                <td>可设置SD卡剩余空间的百分比，当SD卡剩余空间小于这个百分比时，会产生报警 。</td>
+            </tr>
+        </table>		
+        <h2>网络异常</h2>
+        <p class="detailP">当网络断开或IP冲突时，会产生网络异常报警事件；操作与SD卡异常类似。</p>
+		<h2>非法访问</h2>
+        <p class="detailP">当登陆密码错误达到一定次数时，会产生非法访问报警事件；操作与SD卡异常类似。</p>
+        <p class="detailP">允许登陆错误次数：输入该次错误密码后，即触发非法访问报警事件，帐户锁定。</p>
+   </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

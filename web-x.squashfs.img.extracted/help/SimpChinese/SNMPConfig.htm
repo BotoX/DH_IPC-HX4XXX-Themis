@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            SNMP
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <h2>说明</h2>
+        <p>&nbsp;</p>
+        <p class="iconP2">
+            勾选SNMP v1 设备只能处理v1版本的信息，勾选SNMP v2则设备只能处理v2版本的信息。勾选SNMP v3版本时，可设置账号，密码和鉴权方式，服务器要访问该设备时必须设置对应的账号，密码和鉴权方式进行安全校验，且v1 v2版本不可选。
+        </p>
+        <p class="iconP2"> <strong>共同体</strong>
+            ：是一个字符串，作为管理进程和代理进程之间的明文口令，定义了一个代理与一组管理者之间的认证、访问控制和代管的关系。需保证设备与代理之间保持一致。
+        </p>
+        <p class="iconP2"> <strong>读共同体</strong>
+            ：以指定的名称，只读访问所有支持SNMP的对象，默认配置为：public。
+        </p>
+        <p class="iconP2">
+            <strong>写共同体</strong>
+            ：以指定的名称，读/写访问所有支持SNMP的对象。默认配置为：private。
+        </p>
+        <p class="iconP2">
+            <strong>Trap</strong>
+            ：SNMP陷阱是一个SNMP代理发送信息给管理员，是一个代理通知管理站的重要事件或者状态的改变，SNMP v1 或SNMP v2均支持。
+        </p>
+        <p class="iconP2">
+            <strong>Trap地址</strong>
+            为设备上代理程序发送Trap信息的目的地址。
+        </p>
+        <p class="iconP2">
+            <strong>Trap端口</strong>
+            为设备上代理程序发送Trap信息的目的端口，默认为162，范围为1~65535。
+        </p>
+        <p class="iconP2">
+            <strong>SNMP端口</strong>
+            为设备上代理程序监听端口,默认为161，范围为1~65535。
+        </p>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../../css/ui.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/playback.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/skin.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/fn.css" type="text/css" rel="stylesheet"/>
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            回放
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：</span>
+            仅支持以下能力的设备才具有相对应的功能。
+        </p>
+        <h2>播放功能选项</h2>
+        <ul class="listul">
+            <li style="height:50px;">
+                <p class="p1">
+                    <a class="play-bottom-iconbg fn-mart0">
+                        <i class="play-bottom-icon-play"></i>
+                    </a>
+                    <span class="boldT">播放按钮</span>
+                    - 当显示为该按钮时，表示暂停播放或未播放录像，点击该按钮，将切换到正常播放状态。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <a class="play-bottom-iconbg fn-mart0">
+                        <i class="play-bottom-icon-stop"></i>
+                    </a>
+                    <span class="boldT">停止播放按钮</span>
+                    - 点击该按钮，停止播放录像。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <a class="play-bottom-iconbg fn-mart0">
+                        <i class="play-bottom-icon-next"></i>
+                    </a>
+                    <span class="boldT">按帧播放按钮</span>
+                    – 点击该按钮，跳到下一帧播放。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <a class="play-bottom-iconbg fn-mart0">
+                        <i class="play-bottom-icon-slow"></i>
+                    </a>
+                    <span class="boldT">慢进按钮</span>
+                    – 点击该按钮，播放速度变慢。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <a class="play-bottom-iconbg fn-mart0">
+                        <i class="play-bottom-icon-fast"></i>
+                    </a>
+                    <span class="boldT">快放按钮</span>
+                    - 点击该按钮，播放速度变快。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <a class="play-bottom-iconbg play-bottom-iconbg-disabled fn-mart0">
+                        <i class="play-bottom-icon-sound"></i>
+                    </a>
+                    <span class="boldT">静音按钮</span>
+                    - 显示为该按钮时，表示当前处于静音状态，点击该按钮，将切换到正常声音状态。
+                </p>
+            </li>
+            <p>&nbsp;</p>
+            <p class="noiceC">
+                <span class="bold">注:</span>
+                使用按帧播放功能时需将回放暂停。
+            </p>
+        </ul>
+		<h2>文件类型</h2>
+        <p class="detailP">
+            可选择录像回放或者图片回放。
+        </p>
+        <h2>文件列表选项</h2>
+        <p class="detailP">
+            日历中显示为蓝色的日期，表示当前日期有录像文件。点击文件列表选项，选中日期的录像文件将显示在列表中。双击列表中文件，将回放该文件，同时显示文件的大小，文件开始时间及结束时间。
+        </p>
+        <p class="iconP2">搜索：表示查询所选日期输入的开始时间与结束时间之间所有的录像文件。</p>
+        <p class="iconP2">
+            下载按钮：录像类型为dav的情况下，点击下载按钮，将文件下载到本地；录像类型为MP4的情况下，点击下载按钮，将文件下载到存储路径。
+        </p>
+        <p class="iconP2">返回按钮：点击返回按钮，将返回到日历页面，可重新选择时间进行操作。</p>
+			<p class="noiceC">
+				<span class="bold">注：</span>
+				录像下载与回放不能同时进行。
+			</p>
+        <h2>录像类型/图片类型</h2>
+        <p class="detailP">勾选文件类型后在进度条以及文件列表中只显示选中类型的文件。</p>
+		<h2>回放裁剪</h2>
+        <p class="detailP">选择开始时间和结束时间后，点击保存按钮即将文件剪辑到存储路径。
+		</p>
+			<p class="noiceC">
+				<span class="bold">注：</span>
+				回放裁剪与回放不能同时进行。
+			</p>
+		<h2>进度条时间制式</h2>
+        <ul class="listul">
+            <li>
+                <p class="p1">
+                    <a href="javascript:;" class="ui-button-special ui-smart-button">
+                        <i class="ui-button-icon-time">&nbsp;</i>
+                        <label>24hr</label>
+                    </a>
+                    <span class="boldT">24小时按钮</span>
+                    - 点击该按钮，进度条将以24小时模式显示。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <a href="javascript:;" class="ui-button-special ui-smart-button">
+                        <i class="ui-button-icon-time">&nbsp;</i>
+                        <label>2hr</label>
+                    </a>
+                    <span class="boldT">2小时按钮</span>
+                    - 点击该按钮，进度条将显示本段录像所在的两小时范围。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <a href="javascript:;" class="ui-button-special ui-smart-button">
+                        <i class="ui-button-icon-time">&nbsp;</i>
+                        <label>1hr</label>
+                    </a>
+                    <span class="boldT">1小时按钮</span>
+                    - 点击该按钮，进度条将显示本段录像所在的一小时范围。
+                </p>
+            </li>
+            <li>
+                <p class="p1">
+                    <a href="javascript:;" class="ui-button-special ui-smart-button">
+                        <i class="ui-button-icon-time">&nbsp;</i>
+                        <label>30min</label>
+                    </a>
+                    <span class="boldT">30分钟按钮</span>
+                    – 点击该按钮，进度条将显示本段录像所在的30分钟的范围
+                </p>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

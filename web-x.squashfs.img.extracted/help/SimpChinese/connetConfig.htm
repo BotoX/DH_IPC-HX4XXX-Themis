@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            连接
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <h2>参数说明</h2>
+        <table cellpadding="0" cellspacing="0" class="Table">
+            <tr>
+                <th>参数</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td class="wid80">最大连接数</td>
+                <td>同台设备用户可开启web登录的最大个数，设置范围为1~20。</td>
+            </tr>
+            <tr>
+                <td class="wid80">RTSP</td>
+                <td>
+                    <span class="kuai">■</span>
+                    RTSP端口号默认为554，若为默认可不填写。用户使用苹果浏览器QuickTime或者VLC播放实时监控时可使用以下格式播放。黑莓手机也支持该功能。
+                    <br/>
+                    <span class="kuai">■</span>
+                    实时监控码流Url格式，请求实时监控码流Rtsp流媒体服务时，应在Url中指明请求的通道号、码流类型，如果需要认证信息，还有提供用户名和密码。
+                    <br/>
+                    <span class="kuai">■</span>
+                    用户使用黑莓手机访问时，需将码流编码模式设为H.264B，分辨率设为CIF，并将音频关掉。
+                    <br/>
+                    <span class="boldT">Url格式说明如下：</span>
+                    <br/>
+                    rtsp://username:password@ip:port/cam/realmonitor?channel=1&subtype=0
+                    <br/>
+                    其中：
+                    <br/>
+                    username：用户名。例如admin。
+                    <br/>
+                    password：密码。例如admin。
+                    <br/>
+                    ip：为设备IP。例如 10.7.8.122。
+                    <br/>
+                    port：端口号默认为554，若为默认可不填写。
+                    <br/>
+                    channel：通道号，起始为1。例如通道2，则为channel=2。
+                    <br/>
+                    subtype：码流类型，主码流为0（即subtype=0），辅码流为1（即subtype=1）。
+                    <br/>
+                    例如，请求某设备的通道2的辅码流，Url如下：
+                    <br/>
+                    rtsp://admin:admin@10.12.4.84:554/cam/realmonitor?channel=2&subtype=1
+                    <br/>
+                    如果不需认证，则用户名和密码无需指定，使用如下格式即可：
+                    <br/>
+                    rtsp://ip:port/cam/realmonitor?channel=1&subtype=0
+                    <br/>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">TCP端口</td>
+                <td>TCP协议通讯提供服务的端口，范围为1025~65534。</td>
+            </tr>
+            <tr>
+                <td class="wid80">UDP端口</td>
+                <td>用户数据包协议端口，范围为1025~65534。</td>
+            </tr>
+            <tr>
+                <td class="wid80">HTTP端口</td>
+                <td>HTTP通讯端口，范围为1025~65534。</td>
+            </tr>
+            <tr>
+                <td class="wid80">HTTPs</td>
+                <td>
+                    HTTPs通讯服务控制，当开启HTTPs使能时，可以采取https://ip:port方式登录设备，数据加密保护,默认端口时可采用https://ip登录。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">HTTPs端口</td>
+                <td>HTTPs通讯端口，范围为1025~65534。</td>
+            </tr>
+        </table>
+        <p class="noiceC">
+            <span class="bold">
+                注：
+                <br/>
+                1、0-1024、37780-37880、1900、3800、5000、5050、9999、37776、39999、42323
+            </span>
+            已经被用作特殊端口，用户不可设这些端口。
+            <br/>
+            <span class="bold">2、</span>
+            设置端口时不建议使用其它端口的默认值
+        </p>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../../css/ui.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/main.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/skin.css" type="text/css" rel="stylesheet"/>
+    <link href="../../css/fn.css" type="text/css" rel="stylesheet"/>
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body onload="previewHelp()">
+    <div class="detailBox">
+        <h1>
+            预览
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：</span>
+            仅支持以下能力的设备才具有相对应的功能。
+        </p>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">
+                    <a href="javascript:;" class="ui-button">主码流</a>
+                </td>
+                <td>
+                    以流媒体选中的协议连接，在
+                    <a href="encodeConfig.htm" class="linka">主码流配置</a>
+                    下进行视频的监视或关闭。一般用于存储和监视。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">
+                    <a href="javascript:;" class="ui-button">辅码流1</a>
+                </td>
+                <td>
+                    以流媒体选中的协议连接，在
+                    <a  href="encodeConfig.htm" class="linka">辅码流1配置</a>
+                    下进行视频的监视或关闭。在网络带宽不足时，用于代替主码流进行网络监视。
+                </td>
+            </tr>
+			<tr>
+                <td class="wid80">
+                    <a href="javascript:;" class="ui-button">辅码流2</a>
+                </td>
+                <td>
+                    以流媒体选中的协议连接，在
+                    <a  href="encodeConfig.htm" class="linka">辅码流2配置</a>
+                    下进行视频的监视或关闭。在网络带宽不足时，用于代替主码流进行网络监视。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">流媒体协议</td>
+                <td>选择视频监视协议，支持TCP、UDP和组播。</td>
+            </tr>
+        </table>
+        <h2>视频窗口功能选项</h2>
+        <ul class="listul">
+            <li id='help_preview_reginFoucs'>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-reginFoucs"></a></p>
+                    <span class="boldT">区域聚焦</span>
+                    - 点击该按钮，使用鼠标在视频画面上任意框选一个区域，可以让设备在该框选区域内自动聚焦。
+                </div>
+            </li>            
+			<li id='help_preview_remark'>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-icon-duck"></a></p>
+                    <span class="boldT">信息标注</span>
+                    - 点击该按钮，选择画笔颜色，可在预览画面中涂写标注。
+                </div>
+            </li>
+			<li  id='help_preview_gesture'>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-figure"></a></p>
+                    <span class="boldT">手势控制</span>
+                    - 点击该按钮，在预览界面中可通过鼠标左键拖动画面来控制云台，滚轮可控制变倍。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-alarm"></a></p>
+                    <span class="boldT">报警开关</span>
+                    - 点击该按钮，触发报警。当有报警输出/取消时，该灯变为红色/灰色。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-big"></a></p>
+                    <span class="boldT">局部放大按钮</span>
+                    - 点击该按钮，1.在视频处于原始状态时可选择任意区域放大，非原始状态时可在一定范围内拖动放大区域，点击鼠标右键恢复原来状态。2.可通过滚动鼠标滚轮来缩放视频图像大小。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-picture"></a></p>
+                    <span class="boldT">手动抓图按钮</span>
+                    - 点击该按钮，对视频进行抓图，图片保存到存储路径下。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-picturethree"></a></p>
+                    <span class="boldT">三连抓按钮</span>
+                    – 点击该按钮，以每秒一张的频率对视频进行抓图，图片保存到存储路径下。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-vedio"></a></p>
+                    <span class="boldT">手动录像按钮</span>
+                    - 点击该按钮，对视频进行录像，录像保存到存储路径下。
+                </div>
+            </li>
+			 <li id='help_preview_ivs'>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-locate"></a></p>
+                    <span class="boldT">手动跟踪按钮</span>
+                    - 点击该按钮，然后在视频窗口内拖动鼠标左键选择任意区域，球机会对该区域内的物体进行智能跟踪。▲注：该功能需要勾选“智能配置”-“全局配置”-“启用智能跟踪”，否则无效。
+                </div>
+            </li>
+            <li id ='help_preview_easyfocus'>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-afocus"></a></p>
+                    <span class="boldT">辅助聚焦</span>
+                    - 点击该按钮，可在预览视频上看到AF Peak及AF Max两个参数，AF Peak：该值实时显示在聚焦过程中图像清晰度的特征值，AF Max：该值表示图像清晰度的最佳特征值，AF Peak值与AF Max值越接近，聚焦效果越好。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-voice"></a></p>
+                    <span class="boldT">声音开关</span>
+                    - 点击该按钮，打开或关闭监视码流音频的输出。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <p class="help-pre-icons"><a class="main-top-icon-speak"></a></p>
+                    <span class="boldT">语音对讲开关</span>
+                    - 点击该按钮，打开或关闭语音对讲。开启对讲时，请在电脑上关闭立体声混音。
+                </div>
+            </li>
+            <li class="bgli1" id ='help_preview_focus'>
+                <p class="noiceC">注：辅助聚焦功能开启五分钟后将自动关闭。</p>
+            </li>
+        </ul>
+        <h2>视频窗口设置</h2>
+        <ul class="listul">
+            <li>
+                <div class="p1">
+                    <a href="javascript:;" class="ui-video-icon"> <i class="ui-video-icon-image"></i>
+                    </a>
+                    <span class="boldT">图像调节按钮</span>
+                    - 打开图像调节按钮，鼠标左键单击可调节图像配置。
+                </div>
+                <ul class="list2ul">
+                    <li>
+                        <div class="p1">
+                            <i class="ui-slider-icon-light"></i>
+                            - 亮度调节标志，调节监视画面亮度。
+                        </div>
+                    </li>
+                    <li>
+                        <div class="p1">
+                            <i class="ui-slider-icon-contrast"></i>
+                            - 对比度调节标志，调节监视画面对比度。
+                        </div>
+                    </li>
+                    <li>
+                        <div class="p1">
+                            <i class="ui-slider-icon-chroma"></i>
+                            - 色度调节标志，调节监视画面色度。
+                        </div>
+                    </li>
+                    <li>
+                        <div class="p1">
+                            <i class="ui-slider-icon-saturation"></i>
+                            - 饱和度调节标志，调节监视画面饱和度。
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="bgli1">
+                <p class="iconP1 codarl">点击重置按钮可将亮度、对比度、饱和度、色度值恢复到系统默认值</p>
+                <p class="noiceC" id="help_preview_image">
+                    注：该功能只调节本地WEB端监视画面的亮度、对比度、色度、饱和度。设备系统的亮度、对比度、色度、饱和度的调节需在
+                    <a href="cameraConfig.htm" class="linka">设置-相机设置-摄像头属性</a>
+                    部分进行设置。
+                </p>
+            </li>
+            <li>
+                <div class="p1">
+                    <a href="javascript:;" class="ui-video-icon"> <i class="ui-video-icon-per"></i>
+                    </a>
+                    <span class="boldT">原始大小按钮</span>
+                    - 点击该按钮，显示视频码流的实际尺寸。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <a href="javascript:;" class="ui-video-icon"> <i class="ui-video-icon-full"></i>
+                    </a>
+                    <span class="boldT">全屏按钮</span>
+                    - 点击该按钮，全屏显示，双击或Esc键退出全屏。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <a href="javascript:;" class="ui-video-icon"> <i class="ui-video-icon-wh"></i>
+                    </a>
+                    <span class="boldT">高宽比按钮</span>
+                    - 点击该按钮，调节画面至原始比例或适合窗口。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <a href="javascript:;" class="ui-video-icon"> <i class="ui-video-icon-quality"></i>
+                    </a>
+                    <span class="boldT">流畅性调节按钮</span>
+                    - 点击该按钮，三种流畅度等级可供选择，默认为普通。
+                </div>
+            </li>
+            <li>
+                <div class="p1">
+                    <a href="javascript:;" class="ui-video-icon"> <i class="ui-video-icon-ivs"></i>
+                    </a>
+                    <span class="boldT">规则信息按钮</span>
+                    - 点击该按钮，开启后预览页面显示智能规则，默认为开启。
+                </div>
+            </li>
+            <li id='help_preview_ptz'>
+                <div class="p1">
+                    <a href="javascript:;" class="ui-video-icon"> <i class="ui-video-icon-ptz"></i>
+                    </a>
+                    <span class="boldT">PTZ</span>
+                    - 点击该按钮，打开
+                    <a  href="ptz.htm" class="linka">PTZ</a>
+                    配置项
+                </div>
+            </li>
+            <li id="TrackingHelp">
+                <div class="p1">
+                    <a href="javascript:;" class="ui-video-icon"> <i class="ui-video-icon-eye"></i>
+                    </a>
+                    <span class="boldT">物体跟踪</span>
+                    - 对视频中移动的物体，触发了绊线入侵/区域入侵规则的在预览页面进行跟踪显示，显示模式主要有1+3/1+5模式。注意：目前只有4K大分辨率的设备支持该功能。
+                </div>
+            </li>
+        </ul>
+        <div id="focusZoomSet">
+            <h2>聚焦缩放设置</h2>
+            <ul class="listul">
+                <li>
+                    <div class="p1">
+                        <a href="javascript:;" class="ui-video-icon"> <i class="ui-video-icon-adjust"></i>
+                        </a>
+                        <span class="boldT">聚焦缩放按钮</span>
+                        - 打开聚焦缩放按钮，鼠标左键单击可调节聚焦缩放配置。
+                    </div>
+                </li>
+            </ul>
+        <h2>缩放</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">缩小</td>
+                <td>按减号键使镜头的焦距缩小</td>
+            </tr>
+            <tr>
+                <td class="wid80">放大</td>
+                <td>按加号键使镜头的焦距放大</td>
+            </tr>
+            <tr>
+                <td class="wid80">步长</td>
+                <td>步长包括1，5，20，100</td>
+            </tr>
+        </table>
+        <h2>聚焦</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">近</td>
+                <td>按减号键使镜头的焦平面向近景移动</td>
+            </tr>
+            <tr>
+                <td class="wid80">远</td>
+                <td>按加号键使镜头的焦平面向远景移动</td>
+            </tr>
+            <tr>
+                <td class="wid80">步长</td>
+                <td>步长包括1，5，20，100</td>
+            </tr>
+        </table>
+        <h2>全部重置</h2>
+        <p class="detailP">全部重置，缩放和聚焦的值均重置为0。</p>
+        <h2>自动聚焦</h2>
+        <p class="detailP">调节镜头的焦平面使视频图像处于最清晰。</p>
+        <h2>刷新</h2>
+        <p class="detailP">获取缩放聚焦的最新状态。</p>
+    </div>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

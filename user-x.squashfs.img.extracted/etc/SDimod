@@ -1,0 +1,211 @@
+#! /bin/sh
+
+#检验peripheral是否修改
+/usr/etc/checkPeripheral.sh
+
+#以下为能力集初始化
+
+#模拟输出
+CAP_TVOUT=TVOUT
+#SD卡
+CAP_SDCARD=on
+#红外灯
+CAP_IRCTRL=off
+#红外灯，不支持亮度可调
+CAP_NOADJUSTIR=off
+#外部云台485控制
+CAP_EX485=off
+#雨刷控制
+CAP_RAINBRUSH=off
+#广角云台
+CAP_WILDPTZ=off
+#温度控制
+CAP_TEMPCTRL=off
+#云台坐标显示
+CAP_PTZCOOR=off
+#云台变倍显示
+CAP_PTZZOOM=off
+#云台方案
+CAP_PTZSUIT=none
+#风扇调节控制
+CAP_FAN=off
+#加热器调节控制
+CAP_HEATER=off
+#正北方向控制 --- 定制变量
+CAP_NORTH=off
+#球机中性程序名称-----定制变量
+NAME_DOME="IP PTZ Dome"
+#大云台中性程序名称-----定制变量
+NAME_PTZCAMERAL="IP PTZ Camera"
+#机芯单卖隐私遮挡-----定制变量
+CAP_PM=off
+#定时任务
+CAP_AutoMovement=off
+#motor驱动加载
+CAP_MOTOR_PTZ=off
+#wifi加载
+CAP_WIFI=off
+#透雾功能
+CAP_DEFOG=off
+#寿命统计功能
+CAP_LIFESTATUS=off
+
+#flash信息，nand flash使用jsonmerge动态修改pd
+CAP_FLASH=SPI
+
+#根据HWID确定能力集和pd文件路径
+PRODUCT=$(gethwid 0)
+temp=${PRODUCT##*hwidValue == }
+product_name=${temp%% *}
+echo $product_name
+PRODUCT_NAME=$product_name
+PRODUCT2A_NAME=$product_name
+
+case $product_name in
+	SD22204T-GN) CAP_MOTOR_PTZ=on CAP_TEMPCTRL=off CAP_PTZCOOR=on CAP_PTZZOOM=on CAP_PTZSUIT=dome CAP_DEFOG=on CAP_WIFI=on CAP_TVOUT="";;
+	SD22204T-GNW) CAP_MOTOR_PTZ=on CAP_TEMPCTRL=off CAP_PTZCOOR=on CAP_PTZZOOM=on CAP_PTZSUIT=dome CAP_DEFOG=on CAP_WIFI=on CAP_TVOUT="";;
+	CA-HZ2030T) CAP_IRCTRL=off CAP_TEMPCTRL=off CAP_PTZCOOR=off CAP_PTZZOOM=off CAP_PTZSUIT=none CAP_DEFOG=on CAP_FLASH=NAND;;
+	CA-HZ1020TA) CAP_IRCTRL=off CAP_TEMPCTRL=off CAP_PTZCOOR=off CAP_PTZZOOM=off CAP_PTZSUIT=none CAP_DEFOG=on CAP_FLASH=NAND;;
+	CA-HZ2020TA) CAP_IRCTRL=off CAP_TEMPCTRL=off CAP_PTZCOOR=off CAP_PTZZOOM=off CAP_PTZSUIT=none CAP_DEFOG=on CAP_FLASH=NAND;;
+	CA-HZ2012T) CAP_IRCTRL=off CAP_TEMPCTRL=off CAP_PTZCOOR=off CAP_PTZZOOM=off CAP_PTZSUIT=none CAP_DEFOG=on CAP_FLASH=NAND;;
+	SD-6C82E-GN) CAP_TVOUT="";;
+	SD-6C80E-GN) CAP_TVOUT="";;	
+	CA-HZ2030T-S2) CAP_IRCTRL=off CAP_TEMPCTRL=off CAP_PTZCOOR=off CAP_PTZZOOM=off CAP_PTZSUIT=none CAP_DEFOG=on CAP_FLASH=NAND;;
+esac
+
+#新接口通信
+test ! -e /var/tmp/pdiVisca && touch /var/tmp/pdiVisca
+
+#尝试运行定制化脚本，如果custom分区下存在SDcustom.sh脚本的话
+test -e /mnt/custom/SDcustom.sh && source /mnt/custom/SDcustom.sh
+
+#解压缩pd到tmp目录，再根据不同的设备类型拷贝pd文件
+echo "$PRODUCT_NAME"
+unzip /mnt/pd/SDproduct.zip -d /var/tmp	 > /dev/null && \
+mkdir -p /var/tmp/pd 									&& \
+test -d "/var/tmp/SDproduct/$PRODUCT_NAME" 				&& \
+echo "OK"												&& \
+cp -rf /var/tmp/SDproduct/$PRODUCT_NAME/* /var/tmp/pd/ 	&& \
+cp -f /var/tmp/SDproduct/ProductTransform /var/tmp/pd/ 
+rm -rf /var/tmp/SDproduct   
+
+#解压2A配置
+if [ -e /usr/data/2Acfg.zip ];then
+	unzip /usr/data/2Acfg.zip -d /var/tmp > /dev/null
+else
+	cp /usr/data/2Acfg /var/tmp/2Acfg -rf
+fi
+
+#调整到 /var/tmp 减小 /mnt/mtd 占用
+test -n "$PRODUCT2A_NAME" && cd /var/tmp/2Acfg/$PRODUCT2A_NAME && mv Len_Ctrl.bin Len_DftTraceCurve.bin Len_TraceTable.bin Len_Step.bin /var/tmp
+
+#创建/var/tmp/3A目录
+mkdir -p /var/tmp/3A
+unzip /mnt/mtd/3A/aew_para.zip -d /var/tmp/3A > /dev/null
+
+test -n "$PRODUCT2A_NAME" && cp -f /var/tmp/2Acfg/SD-Share/* /var/tmp/3A
+test -n "$PRODUCT2A_NAME" && cp -f /var/tmp/2Acfg/$PRODUCT2A_NAME/* /var/tmp/3A/
+!(test -e "/mnt/mtd/3A/aew_para.zip") && cp /usr/data/aewParam/$PRODUCT2A_NAME/aew_para.zip /mnt/mtd/3A/
+cp -f /var/tmp/2Acfg/3D.bin /var/tmp/3A/
+cp -f /var/tmp/2Acfg/reg.bin /var/tmp/3A/
+cp -f /var/tmp/2Acfg/af_cfg.bin /mnt/mtd/3A/
+
+
+#将打包中的aew_para赋值到内存中，以便进行版本比较，如果比flash的要新，则更换掉flash中的版本
+cp /usr/data/aewParam/$PRODUCT2A_NAME/aew_para.zip /var/tmp/
+unzip /var/tmp/aew_para.zip -d /var/tmp > /dev/null
+
+rm -rf /var/tmp/2Acfg
+
+
+
+#建立机芯配置文件目录的软连接
+mkdir -p /var/Cameras
+cp -f /mnt/pd/SDCameras/SDCameras /var/Cameras/$product_name
+
+#外设管理动态修改pd
+if [ $CAP_FLASH = "NAND" ];then
+	echo "CAP_FLASH = NAND"
+source /usr/etc/SDPDInit
+fi
+
+#兼容老的，如果存在机芯参数，以机芯参数文件为准, 2寸球
+if [ -f /mnt/pd/SDCameras/$product_name ];then
+	echo "there is cameras para"
+    cp -f /mnt/pd/SDCameras/$product_name /var/Cameras/$product_name
+fi
+
+#删除临时的pd和机芯参数
+rm -rf /var/tmp/SDproduct  
+
+#启动syshelper
+#/sbin/syshelper 60 &
+ln -s /sbin/syshelper /var/tmp/ 
+/var/tmp/syshelper 60 &
+
+#启动网络
+ifconfig lo up
+netinit if=eth0 default
+netinit6 if=eth0
+ln -s /usr/sbin/systools /var/tmp/sendarp
+/var/tmp/sendarp 5 &
+
+#启动3800端口升级服务
+#/usr/sbin/upgraded &
+ln -s /usr/sbin/upgraded /var/tmp/
+/var/tmp/upgraded &
+
+#加载镜头驱动，Sensor驱动，安霸固件等内容
+insmod /usr/lib/modules/sensor.ko; insmod /usr/lib/modules/ivf.ko
+insmod /usr/lib/modules/amba_video.ko
+/usr/sbin/load_ucode /usr/lib/firmware
+case "$?" in
+	0)
+	;;
+	*)
+	echo "Load ucode failed!"
+	exit 1
+	;;
+esac
+
+#加载motor ptz驱动
+if [ "$CAP_MOTOR_PTZ" = "on" ];then
+	echo "CAP_MOTOR_PTZ = on"
+	insmod /usr/lib/modules/motorDrv.ko
+fi
+
+#加载镜头驱动
+insmod /usr/lib/modules/len_driver.ko
+	
+#根据SD卡能力加载SD卡驱动
+if [ "$CAP_SDCARD" = "on" ];then
+	echo "CAP_SDCARD = on"
+	insmod /usr/lib/modules/sdcard.ko
+fi
+
+#根据WIFI能力加载WIFI驱动
+if [ "$CAP_WIFI"  =  "on" ];then
+	echo "CAP_WIFI = on"
+	echo host > /proc/ambarella/usbphy0
+	insmod /usr/lib/modules/8188eu.ko
+	netinit if=eth2
+fi
+
+#从eeprom中，读出曲线文件
+ln -s /usr/sbin/systools /var/tmp/eepromProc
+ln -s /usr/sbin/systools /var/tmp/lensFsProc 
+ln -s /usr/sbin/systools /var/tmp/lenDebug
+
+/var/tmp/eepromProc read /var/tmp/
+/var/tmp/lensFsProc read /var/
+
+test -e /var/tmp/Len_TraceCurve.zip && unzip /var/tmp/Len_TraceCurve.zip -d /var/tmp/
+
+if [ $CAP_TVOUT = "on" ]; then
+	CAP_TVOUT="TVOUT"
+elif [ $CAP_TVOUT = "off" ]; then
+	CAP_TVOUT=""
+fi
+
+echo "AEWB AF VISCA $CAP_TVOUT EX2  DSP " > /var/tmp/sonia_para
+

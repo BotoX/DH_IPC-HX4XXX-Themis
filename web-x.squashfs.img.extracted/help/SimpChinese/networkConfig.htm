@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            TCP/IP
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <h2>TCP/IP介绍</h2>
+        <p class="detailP">
+            TCP/IP模块主要设置设备的登入IP，支持IPV4和IPV6两种，IPV4支持静态IP和DHCP动态获取IP方式,IPV6暂时只支持静态IP；当手动修改IP地址后，web页面会自动跳转到新设置IP地址的登录界面。
+        </p>
+        <h2>参数说明</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="wid80">主机名称</td>
+                <td>设置当前主机设备的名称，最大长度为15字符。</td>
+            </tr>
+            <tr>
+                <td class="wid80">网卡</td>
+                <td>设备有多网卡时，可改变默认网卡。</td>
+            </tr>
+            <tr>
+                <td class="wid80">模式</td>
+                <td>
+                    可选静态模式和DHCP模式。选择DHCP模式时自动搜索IP，此时IP/掩码/网关不可设；选择静态模式，需手动设置IP/掩码/网关。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">MAC地址</td>
+                <td>显示主机的mac地址。不可更改</td>
+            </tr>
+            <tr>
+                <td class="wid80">IP版本</td>
+                <td>
+                    可选择IPV4或IPV6版本，目前两个IP地址都支持，都可以进行访问。IPV6访问格式举例： <strong>http://[ fe80::5054:4cff:fefa:1682]</strong>
+                    。
+                    <br/>
+                    <span class="boldT">IPV6版本新增段包括：</span>
+                    <br/>
+                    <span class="gray">链路地址：</span>
+                    每个局域网中的每台主机都会分配一个唯一的链路地址，供局域网访问，这个地址是只读的，不可修改。
+                    <br/>
+                    <span class="gray">IP地址：</span>
+                    类似IPv4的主机IP，但其是128位，不可为空。
+                    <br/>
+                    <span class="gray">子网前缀：</span>
+                    数字型（0-128），子网前缀（subnet prefix）部分标识一个特定的网络链路，子网前缀通常包括了一个层次化的结构。
+                    <br/>
+                    <span class="gray">默认网关：</span>
+                    类似IPv4的网关，但其是128位，不可为空。
+                    <br/>
+                    <span class="gray">首选DNS：</span>
+                    类似IPv4的DNS，但其是128位，不可为空。
+                    <br/>
+                    <span class="gray">备选DNS：</span>
+                    类似IPv4的DNS，但其是128位，不可为空。
+                    <br/>
+                    <p class="noiceC">
+                        <span class="bold">注：</span>
+                        <br />
+                        1、针对所有的IPv6地址进行合法性检验，IP地址和默认网关必须在同一网段，即子网前缀指定长度的字段要相同才能通过检验。
+                        <br />
+                        2、PPPOE使能时，IPV4/IPv6的IP地址、子网掩码、默认网关不可设置或恢复默认。
+                        <br />
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <h2>ARP/Ping设置设备IP地址服务</h2>
+        <p class="detailP">开启该功能在知道MAC地址的情况下，可以通过ARP ping命令修改和设置设备IP地址。</p>
+        <p class="detailP">
+            默认使能开启的情况下，在设备重启过程中，2分钟内可以通过特定长度ping包设置设备IP，2分钟后服务关闭，IP设置成功后，服务也会马上关闭。使能未开启情况下ping包无法设置IP。
+        </p>
+    </p>
+    <h2>通过ARP/Ping设置设备IP实例</h2>
+    <p class="detailP dispos">
+        <span class="boldT">1.</span>
+        获取空闲的IP地址，需要设置地址的IPC和电脑在一个局域网内。
+        <br/>
+        <span class="boldT">2.</span>
+        从IPC设备标签上获取到设备物理地址。
+        <br/>
+        <span class="boldT">3.</span>
+        在电脑上进入命令行输入以下命令。
+        <br/>
+        <span class="pad5">
+            <img src="../image/ARPPing.png"/>
+        </span>
+        <br/>
+        <span class="boldT">4.</span>
+        断电重启IPC设备或者通过网络重启设备。
+        <br/>
+        <span class="boldT">5.</span>
+        查看电脑命令行输出有类似
+        <span class="bold">“Reply from 192.168.0.125 …”</span>
+        信息，则设置成功，可以关闭命令行。
+        <br/>
+        <span class="boldT">6.</span>
+        在浏览器输入
+        <span class="bold">http://&lt; IP address &gt;</span>
+        访问。
+        <br/>
+    </p>
+</div>
+<script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+<script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

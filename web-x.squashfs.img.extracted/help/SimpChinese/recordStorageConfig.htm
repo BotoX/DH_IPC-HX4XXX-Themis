@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            存储
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：</span>
+            仅支持以下能力的设备才具有相对应的功能。
+        </p>
+        <h2>参数说明</h2>
+        <table class="Table" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>参数项</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td class="wid80">存储点</td>
+                <td>
+                    1、配置设备录像和抓图的存储方式，按照事件类型进行存储，分别与时间表中普通，动检和报警对应，打钩表示存储相应类型录像或抓图。
+                    <br/>
+                    2、可选择本地SD卡、FTP或者NAS进行存储。
+                </td>
+            </tr>
+            <tr>
+                <td class="wid80">本地存储</td>
+                <td>列表中显示本地SD卡，可以进行只读、读写、热插拔和格式化操作。</td>
+            </tr>
+            <tr>
+                <td class="wid80">FTP</td>
+                <td>当存储点选择FTP存储方式时，FTP功能才能启用。当网络断开或故障时，紧急存储到本地可以将所要录像或抓图存到本地SD卡。</td>
+            </tr>
+			<tr>
+                <td class="wid80">NAS</td>
+                <td>当存储点选择NAS存储方式时，NAS功能才能启用。选择NAS存储，即可将文件存储到NAS服务器。</td>
+            </tr>
+		</table>
+		<p class="noiceC">
+			<span class="bold">注：</span>
+			FTP和NAS功能同属于网络存储，两者不能同时使用。
+		</p>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

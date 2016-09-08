@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="../help.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="detailBox">
+        <h1>
+            报警
+            <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+        </h1>
+        <p class="noiceC">
+            <span class="bold">说明：</span>
+            仅支持以下能力的设备才具有相对应的功能。
+        </p>
+        <h2>报警介绍</h2>
+        <p class="detailP">
+            报警模块主要供用户订阅报警事件，当触发用户已订阅的报警事件时，就会在右侧窗口栏里记录该报警信息。用户也可以勾选提示或播放报警提示音，报警触发时，触发报警提示或提示音。
+        </p>
+        <h2>参数说明</h2>
+        <p>&nbsp;</p>
+        <p class="iconP2">
+            <span class="boldT">报警类型：</span>
+            打勾选中，订阅此报警事件。
+        </p>
+        <p class="iconP2">
+            <span class="boldT">提示：</span>
+            打勾选中，当页面不在报警页面，触发订阅的报警事件时，在主菜单栏“报警”栏上会出现
+            <img src="../image/alarmk.png" align="absmiddle" height="24"/>
+            图标，且自动记录报警信息。当用户点击报警菜单栏后，图标消失。
+        </p>
+        <p class="noiceC">
+            <span class="bold">注：</span>
+            如果页面显示的是报警页面，当订阅的报警事件触发时，不会有图像提示，但右侧的报警列表中会记录相应的报警信息。
+        </p>
+        <p class="iconP2">
+            <span class="boldT">播放报警提示音：</span>
+            打勾选中，在声音路径栏中选择要播放的声音文件路径，当订阅的报警事件触发时，会播放选中的声音文件来提示有报警事件触发。
+        </p>
+    </div>
+    <script type="text/javascript" src="../../jsBase/lib/m.js"></script>
+    <script type="text/javascript" src="../help.js"></script>
+</body>
+</html>

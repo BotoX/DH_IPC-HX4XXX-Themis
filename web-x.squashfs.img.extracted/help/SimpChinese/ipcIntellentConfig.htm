@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>帮助详细内容</title>
+	<link href="../help.css" type="text/css" rel="stylesheet"/>
+	<script src="../../jsBase/lib/m.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../help.js"></script>
+</head>
+<body>
+<div class="detailBox">
+    <h1>
+    	智能设置—普通场景
+        <a href="javascript:;" class="righBut" onclick="back()">返回目录</a>
+    </h1> 
+	<h2>全局配置</h2><br>
+	<h3 class="wid80">智能跟踪配置</h3>
+    <table class="Table" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="wid80">重建背景</td>
+            <td>点击按钮使智能算法对画面背景进行重新理解。通常相机剧烈运动或搬移过后，需要用此来改善智能功能的检测率。</td>
+        </tr>
+        <tr>
+            <td class="wid80">应用场景</td>
+            <td>选择普通场景</td>
+        </tr>
+		<tr>
+            <td class="wid80">摄像机抖动率</td>
+            <td>设置摄像机抖动率，默认为50。</td>
+        </tr>
+        
+        <tr>
+            <td class="wid80">标定区域</td>
+            <td>需添加3根垂直标尺和一根水平标尺</td>
+        </tr>
+        <tr>
+            <td class="wid80">实际长度</td>
+            <td>需用户根据实际情况手动输入</td>
+        </tr>
+        <tr>
+            <td class="wid80">标定验证</td>
+            <td>根据系统计算所得，与实际长度比较参考</td>
+        </tr>
+        
+    </table>
+    <h2>规则配置</h2>
+    <table class="Table" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="wid80">添加规则</td>
+            <td>点击按钮"添加规则"，对所选择的场景添加规则</td>
+        </tr>
+        <tr>
+            <td class="wid80">启用规则</td>
+            <td>选中后使能当前规则</td>
+        </tr>
+		<tr>
+            <td class="wid80">规则名称</td>
+            <td>鼠标移动至“规则名称”位置，设置规则名称</td>
+        </tr>
+		<tr>
+            <td class="wid80">规则类型</td>
+            <td>鼠标移动至“规则类型”位置，选择该规则的类型（规则类型有绊线入侵、区域入侵、穿越围栏、物品遗留、物品搬移、徘徊检测、停车检测、逆行检测、快速移动、人员聚集）</td>
+        </tr>
+        <tr>
+            <td class="wid80">绘制规则</td>
+            <td>点击按钮，绘制当前规则</td>
+        </tr>
+        <tr>
+            <td class="wid80">删除规则</td>
+            <td>点击按钮，删除所选规则</td>
+        </tr>
+	</table>
+			
+			<h3 class="wid80">区域及属性设置</h3>
+            <table class="Table" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="wid80">支持的物体类型</td>
+					<td>选择物体类型，默认“所有类型”</td>
+				</tr>
+				<tr>
+					<td class="wid80">检测动作列表</td>
+					<td>
+						<span class="kuai">■</span>在区域内：检测目标框进入区域范围内，持续时间超过所设定的时间就触发报警<br/>
+						<span class="kuai">■</span>穿越区域：检测目标框穿越所绘制区域边界时触发报警<br/>
+					</td>
+				</tr>
+				<tr>
+					<td class="wid80">方向</td>
+					<td>针对“检测动作列表”中的“穿越区域”，设置穿越区域的方向，可选择进入、离开、进出</td>
+				</tr>
+				<tr>
+					<td class="wid80">最大目标个数</td>
+					<td>针对“检测动作列表”中的“在区域内”，设置出现在区域内触发报警的最大目标个数，当区域内目标个数超过所设置最大目标个数时，不会触发报警</td>
+				</tr>
+				<tr>
+					<td class="wid80">最小目标个数</td>
+					<td>针对“检测动作列表”中的“在区域内”，设置出现在区域内触发报警的最小目标个数，当区域内目标个数少于所设置最小目标个数时，不会触发报警</td>
+				</tr>
+					<tr>
+					<td class="wid80">最短持续时间</td>
+					<td>针对“检测动作列表”中的“在区域内”，设置当目标框出现在区域内到触发报警之间的最短时间</td>
+				</tr>
+				<tr>
+					<td class="wid80">报告时间间隔</td>
+					<td>针对“检测动作列表”中的“在区域内”，设置报警的时间间隔，为0时表示只报警一次</td>
+				</tr>
+				<tr>
+					<td class="wid80">目标过滤</td>
+					<td>选中使能后，点击按钮"绘制"，可在场景中针对此规则绘制过滤目标的大小模型；点击按钮"清除"，删除所绘制的目标过滤模型</td>
+				</tr>
+			</table>
+
+            <h3 class="wid80">报警联动设置</h3>
+            <table class="Table" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="wid80">规则布防时间段</td>
+					<td>设置规则布防的时间，点击设置按钮打开时间段设置菜单进行设置</td>
+				</tr>
+				<tr>
+					<td class="wid80">录像</td>
+					<td>触发规则报警时进行录像</td>
+				</tr>
+				<tr>
+					<td class="wid80">报警输出</td>
+					<td>触发规则报警时进行报警输出</td>
+				</tr>
+				<tr>
+					<td class="wid80">发送邮件</td>
+					<td>
+						<span class="kuai">■</span>触发规则报警时发送邮件通知用户<br/>
+						<span class="kuai">■</span>注：当网络断开和IP冲突时，无此功能<br/>
+					</td>
+				</tr>					
+				<tr>
+					<td class="wid80">抓图</td>
+					<td>触发规则报警时进行抓图</td>
+				</tr>
+			</table>
+
+	<h2>参数配置</h2>
+    <table class="Table" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="wid80">场景</td>
+            <td>选择对应场景号的场景进行参数设置</td>
+        </tr>
+        <tr>
+            <td class="wid80">漏检和误检平衡模式</td>
+            <td>分为三种模式：折中模式、漏检更少、误检更少</td>
+        </tr>
+        <tr>
+            <td class="wid80">灵敏度</td>
+            <td>分为1~10个等级，默认5，灵敏度越高，低对比度目标和小目标越容易被检出，同时虚检会越多</td>
+        </tr>
+        <tr>
+            <td class="wid80">开启去扰动模块</td>
+            <td>选中后对场景中的随机扰动进行抑制</td>
+        </tr>
+		<tr>
+            <td class="wid80">目标过滤</td>
+            <td>点击按钮"绘制"，可在场景中针对所有规则绘制过滤目标的大小模型；点击按钮"清除"，删除所绘制的目标过滤模型</td>
+        </tr>
+        <tr>
+            <td class="wid80">添加检测区</td>
+            <td>点击按钮"添加检测区"，绘制需要检测的区域</td>
+        </tr>
+        <tr>
+            <td class="wid80">添加排除区</td>
+            <td>点击按钮"添加排除区"，绘制屏蔽检测的区域</td>
+        </tr>
+    </table>
+	<p class="noiceC"><span class="bold">注：仅支持智能能力的设备才有此功能。</span></p>
+</div>
+<div class="detailBox">
+    <h1>
+        智能设置—视频质量检测
+    </h1>
+    <h2>全局配置</h2>
+    <table class="Table" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="wid80">应用场景</td>
+            <td>选择视频质量检测</td>
+        </tr>
+    </table>
+    <h2>参数配置</h2>
+    <table class="Table" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="wid80">启动</td>
+            <td>打勾表示选中，勾选后才能进行检测，默认为开启</td>
+        </tr>
+        <tr>
+            <td class="wid80">检测类型</td>
+            <td>选择检测的功能类型，目前只支持虚焦侦测，其余功能后续开发</td>
+        </tr>
+        <tr>
+            <td class="wid80">阀值</td>
+            <td>分为0~100个等级，默认50，阀值越高，模糊程度越大才会被检出</td>
+        </tr>
+        <tr>
+            <td class="wid80">规则布防时间段</td>
+            <td>设置规则布防的时间，点击设置按钮打开时间段设置菜单进行设置</td>
+        </tr>
+        <tr>
+            <td class="wid80">录像</td>
+            <td>触发规则报警时进行录像</td>
+        </tr>
+        <tr>
+            <td class="wid80">报警输出</td>
+            <td>触发规则报警时进行报警输出</td>
+        </tr>
+        <tr>
+            <td class="wid80">发送邮件</td>
+            <td>
+                <span class="kuai">■</span>触发规则报警时发送邮件通知用户<br/>
+                <span class="kuai">■</span>注：当网络断开和IP冲突时，无此功能<br/>
+            </td>
+        </tr>
+        <tr>
+            <td class="wid80">抓图</td>
+            <td>触发规则报警时进行抓图</td>
+        </tr>
+    </table>
+    <p class="noiceC"><span class="bold">注：仅支持智能能力的设备才有此功能。</span></p>
+</div>
+<div class="detailBox">    
+    <h1>
+    	智能设置—人脸场景
+    </h1> 
+	<h2>全局配置</h2>
+    <table class="Table" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="wid80">应用场景</td>
+            <td>选择人脸场景</td>
+        </tr>
+        <tr>
+            <td class="wid80">人流方向</td>
+           	<td>
+				<span class="kuai">■</span><span class="yellow">绘制 ：</span>点击绘制，在提示区域绘制人流方向线<br/>
+				<span class="kuai">■</span><span class="yellow">清除 ：</span>点击清除，消除已绘制好的人流方向线<br/>
+			</td>
+        </tr>
+        <tr>
+            <td class="wid80">俯仰角度</td>
+           	<td>
+				<span class="kuai">■</span><span class="yellow">正值 ：</span>当俯仰角度为正值K时，表示上仰角度为K度角，如页面上的图例所示。<br/>
+				<span class="kuai">■</span><span class="yellow">负值 ：</span>当俯仰角度为负值K时，表示下俯角度为K度角，如页面上的图例所示。<br/>
+			</td>
+        </tr>
+        <tr>
+            <td class="wid80">左/右角度</td>
+            <td>
+				<span class="kuai">■</span><span class="yellow">正值 ：</span>当左/右角度为正值K时，表示向左的角度为K度角，如页面上的图例所示。<br/>
+				<span class="kuai">■</span><span class="yellow">负值 ：</span>当左/右角度为负值K时，表示向右的角度为K度角，如页面上的图例所示。<br/>
+			</td>
+        </tr>
+    </table>
+    <h2>参数配置</h2>
+    <table class="Table" cellpadding="0" cellspacing="0">
+	    <tr>
+            <td class="wid80">人脸检测区域</td>
+            <td>
+				<span class="kuai">■</span><span class="yellow">添加检测区 ：</span>点击按钮，在提示区域绘制需要检测的区域。<br/>
+			</td>
+        </tr>
+        <tr>
+            <td class="wid80">检测宽度范围</td>
+           <td>
+				<span class="kuai">■</span><span class="yellow">最大尺寸 ：</span>显示能检测到的人脸的最大尺寸，超过该尺寸的将不予检测。<br/>
+				<span class="kuai">■</span><span class="yellow">最小尺寸 ：</span>显示能检测到的人脸的最小尺寸，小于该尺寸的将不予检测。<br/>
+				<span class="kuai">■</span><span class="yellow">绘制 ：</span>点击按钮，在提示区域进行绘制。<br/>
+				<span class="kuai">■</span><span class="yellow">清除 ：</span>点击按钮，消除已绘制好的区域。<br/>
+			</td>
+        </tr>
+        <tr>
+            <td class="wid80">检测精确度</td>
+            <td>分为1~10个等级，默认8，精确度越高，虚检会越少。</td>
+        </tr>
+		<tr>
+            <td class="wid80">灵敏度</td>
+            <td>分为1~10个等级，默认8，灵敏度越高，低对比度目标和小目标越容易被检出，同时虚检会越多。</td>
+        </tr>     
+    </table> 
+	<p class="noiceC"><span class="bold">注：仅支持智能能力的设备才有此功能。</span></p>
+</div>
+</body>
+</html>
